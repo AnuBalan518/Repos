@@ -51,6 +51,16 @@ SHOW GRANTS FOR 'admin'@'%';
 Select * from app_config;
 
 
+--https://github.com/AnuBalan518/Projects.git
+cd C:\Users\amaragathaka\OneDrive - Dedalus S.p.A\Work\AIInitiative\
+git init
+git add .
+git remote add origin https://github.com/AnuBalan518/Repos.git
+git commit -m "Initial commit: Add Project1 and Project2"
+git branch -M main
+git push -u origin main
+
+
 
 CREATE TABLE producttype (
     id INT AUTO_INCREMENT PRIMARY KEY,
