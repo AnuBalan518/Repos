@@ -1,0 +1,65 @@
+/* You can add global styles to this file, and also import other style files */
+$gutter: 1rem; //for primeflex grid system
+
+/* Layout */
+@import "assets/layout/styles/layout/layout.scss";
+
+/* PrimeNG */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+
+/* Quill Text Editor for p-editor */
+@import "../node_modules/quill/dist/quill.core.css";
+@import "../node_modules/quill/dist/quill.snow.css";
+
+/* Demos */
+@import "assets/demo/styles/flags/flags.css";
+@import "assets/demo/styles/badges.scss";
+@import "assets/demo/styles/code.scss";
+
+.required-asterisk {
+    &::after {
+      content: '\00A0';
+    }
+    color: red;
+    word-break: normal;
+  }
+
+  .required::after {
+    content: " *";
+    color: red;
+  }
+
+  input.ng-invalid.ng-dirty,
+p-dropdown.ng-invalid.ng-dirty .p-inputtext,
+p-calendar.ng-invalid.ng-dirty .p-inputtext,
+p-selectbutton.ng-invalid.ng-dirty .p-button {
+  border: 1px solid red !important;
+  box-shadow: none !important;
+}
+
+.p-error {
+  display: flex;
+  align-items: center;
+  color: #f87171;
+  font-size: 0.875rem;
+  gap: 0.4rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.p-error i {
+  font-size: 1rem;
+  color: #ef4444;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
