@@ -1,0 +1,105 @@
+create database hdfclife;
+use hdfclife;
+CREATE TABLE app_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(100) NOT NULL,         -- e.g., 'database', 'ui', 'email'
+    config_key VARCHAR(100) NOT NULL,       -- e.g., 'db_host', 'theme_color', 'smtp_server'
+    config_value TEXT NOT NULL,             -- The value (can be string, JSON, etc.)
+    description TEXT,                       -- Optional: explanation of the config
+    is_active BOOLEAN DEFAULT TRUE,         -- Allows enabling/disabling a config
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    UNIQUE KEY unique_config (category, config_key)
+);
+
+INSERT INTO app_config (category, config_key, config_value, description)
+VALUES 
+  ('ProductType', 'key_linked', 'Linked', 'Linked product type'),
+  ('ProductType', 'key_non_linked', 'Non Linked', 'Non Linked product type'),
+  ('ProductType', 'key_annuity', 'Annuity', 'Annuity product type');
+  
+INSERT INTO app_config (category, config_key, config_value, description)
+VALUES 
+  ('Intermediary', 'key_agency', 'Agency', 'Agency Intermediary'),
+  ('Intermediary', 'key_corporate_agency', 'Corporate Agency', 'Corporate Agency Intermediary'),
+  ('Intermediary', 'key_broker', 'Broker', 'Broker Intermediary'),
+  ('Intermediary', 'key_imf', 'IMF', 'IMF Intermediary'),
+  ('Intermediary', 'key_web_aggregator', 'Web Aggregator', 'Web Aggregator Intermediary'),
+  ('Intermediary', 'key_online', 'Online', 'Online Intermediary'),
+  ('Intermediary', 'key_direct', 'Direct', 'Direct Intermediary');
+
+INSERT INTO app_config (category, config_key, config_value, description)
+VALUES 
+  ('Frequency', 'key_yearly', 'Yearly', 'Yearly Frequency'),
+  ('Frequency', 'key_half_yearly', 'Half Yearly', 'Half Yearly Frequency'),
+  ('Frequency', 'key_quaterly', 'Quaterly', 'Quaterly Frequency'),
+  ('Frequency', 'key_monthly', 'Monthly', 'Monthly Frequency'),
+  ('Frequency', 'key_single_premium', 'Single Premium', 'Single Premium Frequency');
+INSERT INTO app_config (category, config_key, config_value, description)
+VALUES 
+  ('Installment Premium', 'key_yearly', 'Yearly', 'Yearly Installment Premium'),
+  ('Installment Premium', 'key_half_yearly', 'Half Yearly', 'Half Yearly Installment Premium'),
+  ('Installment Premium', 'key_quaterly', 'Quaterly', 'Quaterly Installment Premium'),
+  ('Installment Premium', 'key_monthly', 'Monthly', 'Monthly Installment Premium'),
+  ('Installment Premium', 'key_single', 'Single', 'Single Installment Premium');
+CREATE USER IF NOT EXISTS 'admin'@'%' IDENTIFIED BY 'admin';
+GRANT ALL PRIVILEGES ON hdfclife.* TO 'admin'@'%';
+FLUSH PRIVILEGES;
+SHOW GRANTS FOR 'admin'@'%';
+
+Select * from app_config;
+
+
+
+CREATE TABLE producttype (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    type VARCHAR(100) NOT NULL, -- maps to app_config.config_key
+    uin_number VARCHAR(15) NOT NULL,
+    intermediary VARCHAR(100) NOT NULL, -- maps to app_config.config_key
+    frequency VARCHAR(100) NOT NULL, -- maps to app_config.config_key
+    age_at_entry INT NOT NULL,
+    maturity_age INT NOT NULL,
+    premium_term INT NOT NULL,
+    limited_premium_term INT NOT NULL,
+    policy_term INT NOT NULL,
+    installment_type VARCHAR(100) NOT NULL, -- maps to app_config.config_key
+    installment_premium VARCHAR(100) NOT NULL,
+    single_premium BIGINT NOT NULL,
+    annuity_purchase_price BIGINT NOT NULL,
+    sum_assured BIGINT NOT NULL,
+    product_launch_date TIMESTAMP NOT NULL,
+    product_exit_date TIMESTAMP NOT NULL,
+    clawback VARCHAR(1),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    UNIQUE KEY unique_config (name, type)
+
+    
+);
+
+
+ALTER TABLE producttype
+ADD COLUMN approvalstatus VARCHAR(10) NOT NULL DEFAULT 'New';
+
+ALTER TABLE producttype
+ADD COLUMN status VARCHAR(1) NOT NULL DEFAULT 'A';
+
+
+-- name, type, frequency, premiumTerm, installmentType, installmentPremium, sumAssured
+
+select * from hdfclife.producttype;
+
+CREATE TABLE login (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL, 
+    role VARCHAR(10) NOT NULL
+);
+
+INSERT INTO login (name, password, role)
+VALUES 
+  ('admin', 'admin123', 'checker'),
+  ('ags', 'ags123', 'maker');
