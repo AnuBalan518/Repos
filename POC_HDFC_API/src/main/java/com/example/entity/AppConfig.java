@@ -22,8 +22,8 @@ public class AppConfig {
 	@Column(name = "config_value", columnDefinition = "TEXT", nullable = false)
 	private String configValue;
 
-	@Column(columnDefinition = "TEXT")
-	private String description;
+//	@Column(columnDefinition = "TEXT")
+//	private String description;
 
 	@Column(name = "is_active", nullable = false)
 	private Boolean isActive = true;
@@ -79,13 +79,13 @@ public class AppConfig {
 		this.configValue = configValue;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+//	public String getDescription() {
+//		return description;
+//	}
+//
+//	public void setDescription(String description) {
+//		this.description = description;
+//	}
 
 	public Boolean getIsActive() {
 		return isActive;

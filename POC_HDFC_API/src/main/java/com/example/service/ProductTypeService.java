@@ -50,7 +50,7 @@ public class ProductTypeService {
 
 	public ProductType updateApprovalStatus(Integer id, String approvalStatus) {
 		ProductType productType = repository.findById(id).orElseThrow(() -> new RuntimeException("ProductType not found"));
-		productType.setApprovalStatus(approvalStatus); // Assuming there's a setter for approvalStatus
+		productType.setApprovalstatus(approvalStatus); // Assuming there's a setter for approvalStatus
 		return repository.save(productType);
 	}
 
@@ -84,7 +84,7 @@ public class ProductTypeService {
 		dto.setClawback(pt.getClawback());
 		dto.setCreatedAt(pt.getCreatedAt());
 		dto.setUpdatedAt(pt.getUpdatedAt());
-		dto.setApprovalStatus(pt.getApprovalStatus());
+		dto.setApprovalStatus(pt.getApprovalstatus());
 		dto.setStatus(pt.getStatus());
 		System.out.println("Received Launch Date: " + pt.getProductLaunchDate());
 		return dto;
@@ -114,4 +114,8 @@ public class ProductTypeService {
 		//return "ProductType has been deleted.";
 	}
 
+	public long getCountByApprovalstatusAndStatus(String approvalstatus) {
+		// Assuming 'A' is the status filter
+		return repository.countByApprovalstatusAndStatus(approvalstatus, "A");
+	}
 }

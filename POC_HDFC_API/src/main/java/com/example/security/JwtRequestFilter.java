@@ -1,7 +1,7 @@
 package com.example.security;
 
+import com.example.service.EmployeesService;
 import com.example.utils.JwtUtil;
-import com.example.service.LoginService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final LoginService loginService;
+    private final EmployeesService employeesService;
 
-    public JwtRequestFilter(JwtUtil jwtUtil, LoginService loginService) {
+    public JwtRequestFilter(JwtUtil jwtUtil, EmployeesService employeesService) {
         this.jwtUtil = jwtUtil;
-        this.loginService = loginService;
+        this.employeesService = employeesService;
     }
 
     @Override
@@ -43,9 +43,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         // Validate and authenticate user if JWT token is valid
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            if (jwtUtil.validateToken(jwtToken, loginService.loadUserByUsername(username))) {
+            if (jwtUtil.validateToken(jwtToken, employeesService.loadUserByUsername(username))) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        username, null, loginService.loadUserByUsername(username).getAuthorities());
+                        username, null, employeesService.loadUserByUsername(username).getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

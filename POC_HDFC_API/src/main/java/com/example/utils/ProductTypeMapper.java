@@ -32,7 +32,7 @@ public class ProductTypeMapper {
         entity.setClawback(dto.getClawback());
         entity.setCreatedAt(dto.getCreatedAt());
         entity.setUpdatedAt(dto.getUpdatedAt());
-        entity.setApprovalStatus(dto.getApprovalStatus());
+        entity.setApprovalstatus(dto.getApprovalStatus());
         entity.setStatus(dto.getStatus());
         return entity;
     }
@@ -64,7 +64,7 @@ public class ProductTypeMapper {
         dto.setClawback(entity.getClawback());
         dto.setCreatedAt(entity.getCreatedAt());
         dto.setUpdatedAt(entity.getUpdatedAt());
-        dto.setApprovalStatus(entity.getApprovalStatus());
+        dto.setApprovalStatus(entity.getApprovalstatus());
         dto.setStatus(entity.getStatus());
         return dto;
     }

@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = "com.example.entity")
 @ComponentScan(basePackages = "com.example")
 public class MySqlApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(MySqlApplication.class, args);
 	}

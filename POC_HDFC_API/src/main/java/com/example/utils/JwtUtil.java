@@ -1,6 +1,6 @@
 package com.example.utils;
 
-import com.example.entity.Login;
+import com.example.entity.Employees;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -17,10 +17,10 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    public String generateToken(Login login, String role) {
+    public String generateToken(Employees employees, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", role);
-        return createToken(claims, login.getName());
+        return createToken(claims, employees.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

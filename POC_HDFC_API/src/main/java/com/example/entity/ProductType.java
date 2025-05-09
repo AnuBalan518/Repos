@@ -74,7 +74,7 @@ public class ProductType {
 	private LocalDateTime updatedAt;
 
 	@Column(name = "approvalstatus")
-	private String approvalStatus;
+	private String approvalstatus;
 
 	@Column(name = "status")
 	private String status;
@@ -258,12 +258,12 @@ public class ProductType {
 		this.updatedAt = updatedAt;
 	}
 
-	public String getApprovalStatus() {
-		return approvalStatus;
+	public String getApprovalstatus() {
+		return approvalstatus;
 	}
 
-	public void setApprovalStatus(String approvalStatus) {
-		this.approvalStatus = approvalStatus;
+	public void setApprovalstatus(String approvalStatus) {
+		this.approvalstatus = approvalstatus;
 	}
 
 	public String getStatus() {

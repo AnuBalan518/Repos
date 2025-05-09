@@ -63,11 +63,24 @@ public class ProductTypeController {
 		return ResponseEntity.ok(updated);
 	}
 
+	@PutMapping("/reject/{id}")
+	@PreAuthorize("hasRole('checker')")
+	public ResponseEntity<?> reject(@PathVariable Integer id) {
+		// Assuming you are not updating the other fields, just the approvalStatus
+		ProductType updated = service.updateApprovalStatus(id, "Rejected");
+		return ResponseEntity.ok(updated);
+	}
 
 	// DELETE
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> delete(@PathVariable int id) {
 		String result = service.deleteProductType(id);
 		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/count")
+	public ResponseEntity<Long> getCountByApprovalstatusAndStatus(@RequestParam String approvalstatus) {
+		long count = service.getCountByApprovalstatusAndStatus(approvalstatus);
+		return ResponseEntity.ok(count);
 	}
 }
