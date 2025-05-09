@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoginService } from '../../..//service/login.service';
+import { EmployeeService } from '../../../service/employee.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   loginError: boolean = false;
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService,
+    private employeeService: EmployeeService,
     private router: Router,
     private messageService: MessageService
   ) {}
@@ -32,11 +32,12 @@ export class LoginComponent implements OnInit {
       const { employeeCode, password } = this.loginForm.value;
       console.log("User Name:", employeeCode);
       console.log("Password:", password);
-      this.loginService.login(employeeCode, password).subscribe(
+      this.employeeService.login(employeeCode, password).subscribe(
         (response: any) => {
           console.log("User validated");
           this.loginError = false;
           localStorage.setItem('token', response.token);
+          localStorage.setItem('firstname', response.firstname);
           localStorage.setItem('role', response.role);
           this.router.navigate(['/dashboard']);
         },

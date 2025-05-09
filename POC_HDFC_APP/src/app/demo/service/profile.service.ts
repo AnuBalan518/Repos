@@ -30,8 +30,13 @@ export class ProfileService {
         return this.http.put<ProductType>(`${this.apiUrl}/product-types/update/${id}`, producttype);
     }
 
-  updateApprovalStatus(id: number): Observable<ProductType> {
+  updateApprovalStatus(id: number, status: string): Observable<ProductType> {
+      if (status == "Approved") {
         return this.http.put<ProductType>(`${this.apiUrl}/product-types/approve/${id}`, {});
+       }
+      else {
+          return this.http.put<ProductType>(`${this.apiUrl}/product-types/reject/${id}`, {});
+          }
     }
 
   getProductTypes(): Observable<ProductType[]> {
@@ -49,4 +54,10 @@ export class ProfileService {
         responseType: "text" as "json",
       });
     }
+
+    getCountByApprovalStatus(approvalStatus: string): Observable<number> {
+        return this.http.get<number>(
+          `${this.apiUrl}/product-types/count?approvalstatus=${approvalStatus}`
+        );
+      }
 }

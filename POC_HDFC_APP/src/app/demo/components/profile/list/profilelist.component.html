@@ -10,11 +10,21 @@
                             <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
                         </div>
                     </ng-container>
+                    <ng-container *ngIf="!isMakerUser">
+                        <button pButton pRipple label="Approve" icon="pi pi-check" class="p-button-info mr-2"
+                                (click)="approveSelectedProducts(selectedProducts)"
+                                [disabled]="!selectedProducts || !selectedProducts.length || !isApproveEnabled"></button>
+                        <button pButton pRipple label="Reject" icon="pi pi-times" class="p-button-danger"
+                                (click)="rejectSelectedProducts(selectedProducts)"
+                                [disabled]="!selectedProducts || !selectedProducts.length || !isRejectEnabled"></button>
+                    </ng-container>
                 </ng-template>
 
                 <ng-template pTemplate="right">
                     <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+<!--                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>-->
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="exportFullData()"></button>
+
                 </ng-template>
             </p-toolbar>
 
@@ -39,8 +49,20 @@
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            <p-tableHeaderCheckbox (onChange)="toggleAllEnabled($event)">
+<!--                                [checked]="isAllEnabledSelected"-->
+<!--                                [indeterminate]="isSomeEnabledSelected"-->
+
+                            </p-tableHeaderCheckbox>
                         </th>
+<!--                        <th style="width: 10rem">-->
+<!--                            <input-->
+<!--                                type="checkbox"-->
+<!--                                [checked]="isAllEnabledSelected"-->
+<!--                                [indeterminate]="isSomeEnabledSelected"-->
+<!--                                (change)="toggleAllEnabled($event)"-->
+<!--                            />-->
+<!--                        </th>-->
                         <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
                         <th pSortableColumn="frequency">Frequency <p-sortIcon field="frequency"></p-sortIcon></th>
@@ -48,7 +70,23 @@
                         <th pSortableColumn="installmentType">Installment Type <p-sortIcon field="installmentType"></p-sortIcon></th>
                         <th pSortableColumn="installmentPremium">Installment Premium <p-sortIcon field="installmentPremium"></p-sortIcon></th>
                         <th pSortableColumn="sumAssured">Sum Assured <p-sortIcon field="sumAssured"></p-sortIcon></th>
-                        <th pSortableColumn="approvalStatus">Approval Status <p-sortIcon field="approvalStatus"></p-sortIcon></th>
+<!--                        <th pSortableColumn="approvalStatus">Approval Status <p-sortIcon field="approvalStatus"></p-sortIcon>-->
+<!--                            <p-columnFilter type="text" field="approvalStatus"
+                                    display="menu" placeholder="Search by Approval Status"></p-columnFilter>-->
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Approval Status
+                                <p-columnFilter field="approvalStatus" matchMode="equals" display="menu">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-dropdown [ngModel]="value" [options]="approvalStatusOptions" (onChange)="filter($event.value)" placeholder="Any" [style]="{'min-width': '12rem'}" >
+                                            <ng-template let-option pTemplate="item">
+                                                <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </ng-template>
+                                </p-columnFilter>
+                            </div>
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </ng-template>
@@ -61,7 +99,9 @@
                             </a>
                         </td>
                         <td>
-                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="product" [disabled]="!isProductEnabled(product)">
+<!--                                             [disabled]="product.approvalStatus == 'Approved' || product.approvalStatus == 'Rejected'">-->
+                            </p-tableCheckbox>
                         </td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.type }}</td>
@@ -70,7 +110,12 @@
                         <td>{{ product.installmentType }}</td>
                         <td>{{ product.installmentPremium }}</td>
                         <td>{{ product.sumAssured }}</td>
-                        <td>{{ product.approvalStatus }}</td>
+<!--                        <td>{{ product.approvalStatus }}</td>-->
+                        <td>
+                            <span [class]="'approvalstatus-badge approvalstatus-' + product.approvalStatus.toLowerCase()">
+                                {{ product.approvalStatus }}
+                            </span>
+                        </td>
                         <td>
                             <div class="flex">
                                 <ng-container *ngIf="isMakerUser">
@@ -78,43 +123,66 @@
                                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
                                 </ng-container>
 
-                                <ng-container *ngIf="!isMakerUser && product.approvalStatus !== 'Approved'">
-                                    <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-info" (click)="approveProduct(product)"></button>
+                                <ng-container *ngIf="!isMakerUser">
+                                    <!-- Approve Button -->
+                                    <button pButton pRipple icon="pi pi-check"
+                                            class="p-button-rounded p-button-info mr-2"
+                                            (click)="approveProduct(product)"
+                                            [disabled]="product.approvalStatus == 'Approved' || product.approvalStatus == 'Rejected'"
+                                    ></button>
+
+                                    <!-- Reject Button -->
+                                    <button pButton pRipple icon="pi pi-times"
+                                            class="p-button-rounded p-button-danger"
+                                            (click)="rejectProduct(product)"
+                                            [disabled]="product.approvalStatus == 'Approved' || product.approvalStatus == 'Rejected'"
+                                    ></button>
+
                                 </ng-container>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
-
                 <!-- Row Expansion Template -->
                 <ng-template pTemplate="rowexpansion" let-product>
                     <tr>
-                        <td colspan="20">
+                        <td colspan="100">
                             <div class="expanded-content">
-                                <table class="table">
-                                    <tr>
-                                        <td><strong>ID:</strong></td><td>{{ product.id }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                        <td><strong>UIN Number:</strong></td><td>{{ product.uinNumber }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Age at Entry:</strong></td><td>{{ product.ageAtEntry }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                        <td><strong>Clawback:</strong></td><td>{{ product.clawback }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Product Launch Date:</strong></td><td>{{ product.productLaunchDate | date:'yyyy-MM-dd' }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                        <td><strong>Product Exit Date:</strong></td><td>{{ product.productExitDate | date:'yyyy-MM-dd' }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Annuity Purchase Price:</strong></td><td>{{ product.annuityPurchasePrice | currency:'INR' }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                    </tr>
-                                    <!-- Add more rows here if needed -->
-                                </table>
+                                <!-- Unified Header -->
+                                <div class="header-row">
+                                    <div class="header-item">UIN Number</div>
+                                    <div class="header-item">Age at Entry</div>
+                                    <div class="header-item">Maturity Age</div>
+                                    <div class="header-item">Intermediary</div>
+                                    <div class="header-item">Limited Premium Term</div>
+                                    <div class="header-item">Policy Term</div>
+                                    <div class="header-item">Single Premium</div>
+                                    <div class="header-item">Clawback</div>
+                                    <div class="header-item">Product Launch Date</div>
+                                    <div class="header-item">Product Exit Date</div>
+                                    <div class="header-item">Annuity Purchase Price</div>
+                                </div>
+
+                                <!-- Row Values -->
+                                <div class="value-row">
+
+                                    <div class="value-item">{{ product.uinNumber }}</div>
+                                    <div class="value-item">{{ product.ageAtEntry }}</div>
+                                    <div class="value-item">{{ product.maturityAge }}</div>
+                                    <div class="value-item">{{ product.intermediary }}</div>
+                                    <div class="value-item">{{ product.limitedPremiumTerm }}</div>
+                                    <div class="value-item">{{ product.policyTerm }}</div>
+                                    <div class="value-item">{{ product.singlePremium }}</div>
+                                    <div class="value-item">{{ product.clawback }}</div>
+                                    <div class="value-item">{{ product.productLaunchDate | date:'yyyy-MM-dd' }}</div>
+                                    <div class="value-item">{{ product.productExitDate | date:'yyyy-MM-dd' }}</div>
+                                    <div class="value-item">{{ product.annuityPurchasePrice | currency:'INR' }}</div>
+                                </div>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
-
         </div>
 
         <!-- Delete Product Dialogs -->

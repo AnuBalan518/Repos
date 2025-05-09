@@ -1,32 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from '../../../service/profile.service';
 import { AppConfig } from "../../models/appconfig";
 import { ProductType } from "../../models/producttype";
-import { TagModule } from 'primeng/tag';
 
 @Component({
-    templateUrl: './profilecreate.component.html'
+    templateUrl: './profileupdate.component.html'
 })
-export class ProfileCreateComponent implements OnInit {
+export class ProfileUpdateComponent implements OnInit {
 
     profileForm!: FormGroup;
+    editingId: number | null = null;
 
     productTypes: any[] = [];
     paymentOptions: any[] = [];
     frequency: any[] = [];
     intermediatries: any[] = [];
-    configOptions: AppConfig[] = [];
-    selectedConfigKey: string = '';
 
-    constructor(private router: Router,private fb: FormBuilder,
-        private profileService: ProfileService) {
+    createdDate: string = '';
 
+    constructor(
+        private router: Router,
+        private fb: FormBuilder,
+        private profileService: ProfileService,
+        private route: ActivatedRoute
+    ) {}
+
+    ngOnInit() {
+        this.initGroup();
+        this.loadDropdowns();
+
+        const idParam = this.route.snapshot.paramMap.get('id');
+        if (idParam) {
+            this.editingId = +idParam;
+            this.profileService.getProductTypeById(this.editingId).subscribe((product: ProductType) => {
+                this.patchForm(product);
+            });
+        }
     }
 
-    initGroup()
-    {
+    initGroup() {
         this.profileForm = this.fb.group({
             productName: ['', Validators.required],
             productType: [null, Validators.required],
@@ -34,78 +48,70 @@ export class ProfileCreateComponent implements OnInit {
             intermediary: [null, Validators.required],
             frequency: [null, Validators.required],
             ageAtEntry: ['', [Validators.required, Validators.min(0), Validators.max(120)]],
-            maturityAge: ['', [Validators.required]],
+            maturityAge: ['', Validators.required],
             premiumTerm: ['', Validators.required],
             limitedPremiumTerm: ['', Validators.required],
-            //chooseOne: ['1', Validators.required],
             installmentType: ['', Validators.required],
             installmentPremium: ['', Validators.required],
             singlePremium: ['', Validators.required],
             sumAssured: ['', Validators.required],
             //launchDateInput: ['', Validators.required],
             launchDate: [null, Validators.required],
-            exitDate: [null, Validators.required]
-          });
+            exitDate: [null, Validators.required],
+            clawback: [false]
+        });
     }
 
-    ngOnInit() {
-        this.initGroup();
-
+    loadDropdowns() {
         this.profileService.getConfigByCategory('ProductType').subscribe((data: AppConfig[]) => {
-          this.productTypes = data.map((item: AppConfig) => ({
-            name: item.configValue,
-            code: item.configKey
-          }));
+            this.productTypes = data.map(item => ({ name: item.configValue, code: item.configKey }));
         });
 
         this.profileService.getConfigByCategory('Frequency').subscribe((data: AppConfig[]) => {
-          this.frequency = data.map((item: AppConfig) => ({
-            name: item.configValue,
-            code: item.configKey
-          }));
+            this.frequency = data.map(item => ({ name: item.configValue, code: item.configKey }));
         });
 
         this.profileService.getConfigByCategory('Intermediary').subscribe((data: AppConfig[]) => {
-          this.intermediatries = data.map((item: AppConfig) => ({
-            name: item.configValue,
-            code: item.configKey
-          }));
+            this.intermediatries = data.map(item => ({ name: item.configValue, code: item.configKey }));
         });
 
         this.profileService.getConfigByCategory('Installment Premium').subscribe((data: AppConfig[]) => {
-            this.paymentOptions = data.map((item: AppConfig) => ({
-                 name: item.configValue,
-                 code: item.configKey
-            }));
+            this.paymentOptions = data.map(item => ({ name: item.configValue, code: item.configKey }));
         });
+    }
 
-//         this.paymentOptions = [
-//             { name: 'Yearly', value: 1 },
-//             { name: 'Half Yearly', value: 2 },
-//             { name: 'Quarterly', value: 3 },
-//             { name: 'Monthly', value: 4 },
-//             { name: 'Single', value: 5 }
-//         ];
+    patchForm(product: ProductType) {
+        this.createdDate = product.createdAt;
+        this.profileForm.patchValue({
+            productName: product.name,
+            productType: product.type,
+            uinNumber: product.uinNumber,
+            intermediary: product.intermediary,
+            frequency: product.frequency,
+            ageAtEntry: product.ageAtEntry,
+            maturityAge: product.maturityAge,
+            premiumTerm: product.premiumTerm,
+            limitedPremiumTerm: product.limitedPremiumTerm,
+            installmentType: product.installmentType,
+            installmentPremium: product.installmentPremium,
+            singlePremium: product.singlePremium,
+            sumAssured: product.sumAssured,
+            launchDate: new Date(product.productLaunchDate),
+            exitDate: new Date(product.productExitDate),
+            clawback: product.clawback === 'Y'
+        });
     }
 
     save() {
         if (this.profileForm.invalid) {
-            this.profileForm.markAllAsTouched(); // trigger validation messages
+            this.profileForm.markAllAsTouched();
             return;
         }
 
         const form = this.profileForm.controls;
 
-//         const productType: ProductType = {
-//             ...this.profileForm.value,
-//             productLaunchDate: new Date(form['launchDate'].value).toISOString(),
-//             productExitDate: new Date(form['exitDate'].value).toISOString(),
-//             createdAt: new Date().toISOString(),
-//             updatedAt: new Date().toISOString()
-//             }
-
         const productType: ProductType = {
-            id: 0, // or existing ID if editing
+            id: this.editingId ?? 0,
             name: form['productName'].value,
             type: form['productType'].value,
             uinNumber: form['uinNumber'].value,
@@ -117,27 +123,26 @@ export class ProfileCreateComponent implements OnInit {
             limitedPremiumTerm: +form['limitedPremiumTerm'].value,
             policyTerm: +form['premiumTerm'].value,
             installmentType: form['installmentType'].value,
-            //installmentType: form['chooseOne'].value === 'installment' ? 'INSTALLMENT' : 'SINGLE',
             installmentPremium: form['installmentPremium'].value,
             singlePremium: +form['singlePremium'].value,
-            annuityPurchasePrice: 0, // You can replace it if input exists
+            annuityPurchasePrice: 0,
             sumAssured: +form['sumAssured'].value,
             productLaunchDate: new Date(form['launchDate'].value).toISOString(),
             productExitDate: new Date(form['exitDate'].value).toISOString(),
             clawback: form['clawback']?.value ? 'Y' : 'N',
-            createdAt: new Date().toISOString(),
+            createdAt: this.createdDate,//new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             approvalStatus: 'New',
             status: 'A'
         };
-
-        console.log(productType);
-
-        this.profileService.saveProductType(productType).subscribe({
-            next: (res: any) => console.log('Saved', res),
+        console.log(productType)
+        this.profileService.updateProductType(productType, productType.id).subscribe({
+            next: (res: any) => {
+                console.log('Updated', res);
+                this.router.navigateByUrl('/profile/list');
+            },
             error: (err: any) => console.error('Error', err)
-        })
-        this.router.navigateByUrl('/profile/list');
+        });
     }
 
     discard() {

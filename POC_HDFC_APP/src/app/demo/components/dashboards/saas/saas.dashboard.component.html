@@ -4,8 +4,8 @@
             <div class="flex align-items-center p-3">
                 <i class="pi pi-users text-6xl text-blue-500"></i>
                 <div class="ml-3">
-                    <span class="text-blue-500 block white-space-nowrap">POLICY ISSUED</span>
-                    <span class="text-blue-500 block text-4xl font-bold">3882</span>
+                    <span class="text-blue-500 block white-space-nowrap">NEW</span>
+                    <span class="text-blue-500 block text-4xl font-bold">{{ countOfNewProductTypes }}</span>
                 </div>
             </div>
             <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full" alt="users">
@@ -16,8 +16,8 @@
             <div class="flex align-items-center p-3">
                 <i class="pi pi-map text-6xl text-orange-500"></i>
                 <div class="ml-3">
-                    <span class="text-orange-500 block white-space-nowrap">RULES APPLIED</span>
-                    <span class="text-orange-500 block text-4xl font-bold">532</span>
+                    <span class="text-orange-500 block white-space-nowrap">REJECTED</span>
+                    <span class="text-orange-500 block text-4xl font-bold">{{ countOfRejectedProductTypes }}</span>
                 </div>
             </div>
             <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full" alt="locations">
@@ -28,8 +28,8 @@
             <div class="flex align-items-center p-3">
                 <i class="pi pi-directions text-6xl text-green-500"></i>
                 <div class="ml-3">
-                    <span class="text-green-500 block white-space-nowrap">CLAIM SUCCESS RATIO</span>
-                    <span class="text-green-500 block text-4xl font-bold">99.6%</span>
+                    <span class="text-green-500 block white-space-nowrap">APPROVED</span>
+                    <span class="text-green-500 block text-4xl font-bold">{{ countOfApprovedProductTypes }}</span>
                 </div>
             </div>
             <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full" alt="conversion">
@@ -40,8 +40,8 @@
             <div class="flex align-items-center p-3">
                 <i class="pi pi-comments text-6xl text-purple-500"></i>
                 <div class="ml-3">
-                    <span class="text-purple-500 block white-space-nowrap">CLAIMED TODAY</span>
-                    <span class="text-purple-500 block text-4xl font-bold">440</span>
+                    <span class="text-purple-500 block white-space-nowrap">OVERALL</span>
+                    <span class="text-purple-500 block text-4xl font-bold">{{ countOfOverAllProductTypes }}</span>
                 </div>
             </div>
             <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full mt-auto" alt="interactions">
@@ -51,7 +51,7 @@
     <div class="col-12 xl:col-6">
         <div class="card h-full">
             <div class="flex justify-content-between align-items-center mb-3">
-                <h5>Acquisition Overview</h5>
+                <h5>Products Overview</h5>
                 <p-dropdown [options]="overviewWeeks" [(ngModel)]="selectedOverviewWeek" optionLabel="name" (onChange)="changeOverviewWeek()"></p-dropdown>
             </div>
             <div class="graph">
@@ -62,59 +62,36 @@
 
     <div class="col-12 lg:col-6 xl:col-3">
         <div class="card h-full">
-            <h5>Latest Customers</h5>
+            <h5>Employees</h5>
             <ul class="list-none p-0 m-0">
-                <li class="mb-4 flex align-items-center">
-                    <p-avatar label="BS" size="large" shape="circle" styleClass="text-base font-bold"
-                              [style]="{'background-color':'rgba(101, 214, 173, 0.1)', 'color': '#27AB83', 'border': '1px solid #65D6AD'}"></p-avatar>
+                <li *ngFor="let employee of employees" class="mb-4 flex align-items-center">
+                    <p-avatar
+                        label="{{ employee.firstname[0] + employee.lastname[0] }}"
+                        size="large"
+                        shape="circle"
+                        styleClass="text-base font-bold"
+                        [style]="{
+            'background-color': 'rgba(101, 214, 173, 0.1)',
+            color: '#27AB83',
+            border: '1px solid #65D6AD'
+          }"
+                    ></p-avatar>
                     <div class="ml-3">
-                        <span class="block">Brooklyn Simmons</span>
-                        <span class="text-color-secondary block">Manager at Mitsubishi</span>
-                    </div>
-                </li>
-                <li class="mb-4 flex align-items-center">
-                    <p-avatar label="LA" size="large" shape="circle" styleClass="text-base font-bold"
-                              [style]="{'background-color':'rgba(250, 219, 95, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
-                    <div class="ml-3">
-                        <span class="block">Leslie Alexander</span>
-                        <span class="text-color-secondary  block">Customer Success at General Electric</span>
-                    </div>
-                </li>
-                <li class="mb-4 flex align-items-center">
-                    <p-avatar label="JB" size="large" shape="circle" styleClass="text-base font-bold"
-                              [style]="{'background-color':'rgba(94, 208, 250, 0.1)', 'color': '#1992D4', 'border': '1px solid #5ED0FA'}"></p-avatar>
-                    <div class="ml-3">
-                        <span class="block">Jerome Bell</span>
-                        <span class="text-color-secondary  block">Mario Carrier at Nintendo</span>
-                    </div>
-                </li>
-                <li class="mb-4 flex align-items-center">
-                    <p-avatar label="JJ" size="large" shape="circle" styleClass="text-base font-bold"
-                              [style]="{'background-color':'rgba(43, 176, 237, 0.1)', 'color': '#127FBF', 'border': '1px solid #2BB0ED'}"></p-avatar>
-                    <div class="ml-3">
-                        <span class="block">Jim Jones</span>
-                        <span class="text-color-secondary  block">Reliability Engineer at eBay</span>
-                    </div>
-                </li>
-                <li class="mb-4 flex align-items-center">
-                    <p-avatar label="AB" size="large" shape="circle" styleClass="text-base font-bold"
-                              [style]="{'background-color':'rgba(255, 155, 155, 0.1)', 'color': '#CF1124', 'border': '1px solid #FF9B9B'}"></p-avatar>
-                    <div class="ml-3">
-                        <span class="block">Annette Black</span>
-                        <span class="text-color-secondary  block">Delivery Woman at Pizza Hut</span>
-                    </div>
-                </li>
-                <li class="mb-4 flex align-items-center">
-                    <p-avatar label="AF" size="large" shape="circle" styleClass="text-base font-bold"
-                    
-                              [style]="{'background-color':'rgba(250, 219, 95, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
-                    <div class="ml-3">
-                        <span class="block">Albert Flores</span>
-                        <span class="text-color-secondary  block">Team Leader at Insomniac Games</span>
+                        <span class="block">{{ employee.firstname }} {{ employee.lastname }}</span>
+                        <span class="text-color-secondary block">{{ employee.email }}</span>
+                        <span class="text-color-secondary block">{{ employee.mobile }}</span>
                     </div>
                 </li>
             </ul>
-            <button type="button" pButton pRipple class="w-full mt-3 " label="View All" icon="pi pi-arrow-right" iconPos="right"></button>
+            <button
+                type="button"
+                pButton
+                pRipple
+                class="w-full mt-3"
+                label="View All"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+            ></button>
         </div>
     </div>
 
@@ -133,7 +110,7 @@
                         <span class="text-blue-500 hover:underline cursor-pointer block font-bold">Go Profile Edit</span>
                     </div>
                 </li>
-    
+
                 <li class="mb-4 flex align-items-center justify-content-start">
                     <p-avatar icon="pi pi-send" size="large" shape="circle" styleClass="text-base font-bold"
                               [style]="{'background-color':'rgba(250, 219, 95, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
@@ -142,7 +119,7 @@
                         <span class="text-blue-500 hover:underline cursor-pointer block font-bold">Send Verification SMS</span>
                     </div>
                 </li>
-    
+
                 <li class="mb-4 flex align-items-center justify-content-start">
                     <p-avatar icon="pi pi-video" size="large" shape="circle" styleClass="text-base font-bold"
                               [style]="{'background-color':'rgba(250, 219, 95, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
@@ -151,7 +128,7 @@
                         <span class="text-blue-500 hover:underline cursor-pointer block font-bold">Upload Pictures</span>
                     </div>
                 </li>
-    
+
                 <li class="mb-4 flex align-items-center justify-content-start">
                     <p-avatar icon="pi pi-briefcase" size="large" shape="circle" styleClass="text-base font-bold"
                               [style]="{'background-color':'rgba(250, 219, 95, 0.1)', 'color': '#DE911D', 'border': '1px solid #FADB5F'}"></p-avatar>
@@ -469,21 +446,21 @@
             </p-tabView>
         </div>
     </div>
-    
+
     <div class="col-12 lg:col-6 xl:col-4">
         <div class="card h-full">
             <h5>Recent Blog Posts</h5>
             <div class="flex flex-column mb-3">
                 <span class="text-lg mb-3">What is the Customer Journey?</span>
                 <p-tag value="Conversion" styleClass="mb-3"></p-tag>
-                
+
                 <span class="inline-flex align-items-center">
                     <i class="pi pi-clock mr-1 text-color-secondary"></i>
-                    <span class="text-color-secondary">Jan 15.</span> 
+                    <span class="text-color-secondary">Jan 15.</span>
                     <span class="font-bold ml-2">4 days 36 mins</span>
                 </span>
             </div>
-            <p class="line-height-3 mt-0 mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            <p class="line-height-3 mt-0 mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
             <p class="line-height-3 mt-0 mb-5">Sit amet nulla facilisi morbi tempus iaculis. Dolor magna eget est lorem ipsum
@@ -506,7 +483,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12 lg:col-6">
         <div class="card widget-timeline">
             <h5>Timeline</h5>
@@ -519,7 +496,7 @@
                         </span>
                         <div class="h-full bg-blue-100" style="width: 2px; min-height: 4rem"></div>
                     </div>
-    
+
                     <div class="ml-3 flex-1">
                         <div class="flex align-items-center justify-content-between mb-3">
                             <span>
@@ -540,7 +517,7 @@
                             <p class="text-color-secondary text-sm line-height-3 mb-3" style="max-width: 28rem">Hooray! I suck at
                                 hardware but I was able to get the pi zero W, plus usb case, plus two color e-ink hat,
                                 to work!</p>
-    
+
                             <p-progressBar [value]="50" [showValue]="false" styleClass="w-full md:w-6" [style]="{height:'.5rem'}"></p-progressBar>
                         </div>
                     </div>

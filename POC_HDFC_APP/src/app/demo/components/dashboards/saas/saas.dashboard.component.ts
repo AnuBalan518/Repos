@@ -1,6 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { ProfileService } from '../../../service/profile.service';
+import { EmployeeService } from '../../../service/employee.service';
+import { Employee } from '../../models/employee';
+import { forkJoin } from 'rxjs';
 
 @Component({
     templateUrl: './saas.dashboard.component.html'
@@ -21,7 +25,14 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    constructor(public layoutService: LayoutService) { 
+    countOfNewProductTypes: number = 0;
+    countOfRejectedProductTypes: number = 0;
+    countOfApprovedProductTypes: number = 0;
+    countOfOverAllProductTypes: number = 0;
+    employees: Employee[] = [];
+    constructor(public layoutService: LayoutService,
+        private profileService: ProfileService,
+        private employeeService: EmployeeService) {
         this.subscription = this.layoutService.configUpdate$
         .pipe(debounceTime(25))
         .subscribe((config) => {
@@ -31,13 +42,90 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.initCharts();
-
+        this.getProductTypesCount();
+        this.fetchEmployees();
         this.overviewWeeks = [
-            {name: 'Last Week', code: '0'},
-            {name: 'This Week', code: '1'}
+            {name: 'Last Month', code: '0'},
+            {name: 'This Month', code: '1'}
         ];
         this.selectedOverviewWeek = this.overviewWeeks[0]
     }
+
+    getProductTypesCount(): void {
+        forkJoin({
+            new: this.profileService.getCountByApprovalStatus('New'),
+            rejected: this.profileService.getCountByApprovalStatus('Rejected'),
+            approved: this.profileService.getCountByApprovalStatus('Approved'),
+          }).subscribe({
+            next: (counts) => {
+              this.countOfNewProductTypes = counts.new;
+              this.countOfRejectedProductTypes = counts.rejected;
+              this.countOfApprovedProductTypes = counts.approved;
+              this.calculateOverallCount();
+            },
+            error: (err) => {
+              console.error('Error fetching product type counts:', err);
+            },
+          });
+//       let completedCalls = 0;
+//
+//       this.profileService.getCountByApprovalStatus('New').subscribe({
+//         next: (count: number) => {
+//           this.countOfNewProductTypes = count;
+//           completedCalls++;
+//           if (completedCalls === 3) {
+//             this.calculateOverallCount();
+//           }
+//         },
+//         error: (err: any) => {
+//           console.error('Error fetching ProductTypes New count:', err);
+//         }
+//       });
+//
+//       this.profileService.getCountByApprovalStatus('Rejected').subscribe({
+//         next: (count: number) => {
+//           this.countOfRejectedProductTypes = count;
+//           completedCalls++;
+//           if (completedCalls === 3) {
+//             this.calculateOverallCount();
+//           }
+//         },
+//         error: (err: any) => {
+//           console.error('Error fetching ProductTypes Rejected count:', err);
+//         }
+//       });
+//
+//       this.profileService.getCountByApprovalStatus('Approved').subscribe({
+//         next: (count: number) => {
+//           this.countOfApprovedProductTypes = count;
+//           completedCalls++;
+//           if (completedCalls === 3) {
+//             this.calculateOverallCount();
+//           }
+//         },
+//         error: (err: any) => {
+//           console.error('Error fetching ProductTypes Approved count:', err);
+//         }
+//       });
+    }
+
+    calculateOverallCount(): void {
+      this.countOfOverAllProductTypes =
+        this.countOfApprovedProductTypes +
+        this.countOfNewProductTypes +
+        this.countOfRejectedProductTypes;
+    }
+
+    fetchEmployees(): void {
+        this.employeeService.getEmployees().subscribe({
+          next: (data: Employee[]) => {
+            this.employees = data;
+          },
+          error: (err: any) => {
+            console.error('Error fetching employees:', err);
+          },
+        });
+      }
 
     initCharts() {
         const documentStyle = getComputedStyle(document.documentElement);
@@ -195,7 +283,7 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
         if (this.selectedOverviewWeek.code === '1') {
             this.overviewChartData.datasets[0].data = dataSet2[parseInt('0')];
             this.overviewChartData.datasets[1].data = dataSet2[parseInt('1')];
-        } 
+        }
         else {
             this.overviewChartData.datasets[0].data = dataSet1[parseInt('0')];
             this.overviewChartData.datasets[1].data = dataSet1[parseInt('1')];

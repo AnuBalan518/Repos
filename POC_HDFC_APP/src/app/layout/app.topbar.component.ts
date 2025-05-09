@@ -18,6 +18,14 @@ export class AppTopBarComponent {
 
     constructor(public layoutService: LayoutService) {}
 
+    firstname: string = '*****';
+      role: string = 'Maker';
+
+      ngOnInit() {
+        this.firstname = localStorage.getItem('firstname') || '*****';
+        this.role = localStorage.getItem('role') || 'Maker';
+        this.role = this.role.charAt(0).toUpperCase() + this.role.slice(1).toLowerCase(); // Making 1st character to upper
+      }
     onMenuButtonClick() {
         this.layoutService.onMenuToggle();
     }

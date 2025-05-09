@@ -1,0 +1,143 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <ng-container *ngIf="isMakerUser">
+                        <div class="my-2">
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                        </div>
+                    </ng-container>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <!-- Main Product Table -->
+            <p-table #dt [value]="products" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','type','frequency','premiumTerm','installmentType','installmentPremium','sumAssured']"
+                     [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                     [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id"
+                     [expandedRowKeys]="expandedRowKeys" (expandedRowKeysChange)="onExpandedRowKeysChange($event)" expandableRows>
+
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Products</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
+                        <th pSortableColumn="frequency">Frequency <p-sortIcon field="frequency"></p-sortIcon></th>
+                        <th pSortableColumn="premiumTerm">Premium Term <p-sortIcon field="premiumTerm"></p-sortIcon></th>
+                        <th pSortableColumn="installmentType">Installment Type <p-sortIcon field="installmentType"></p-sortIcon></th>
+                        <th pSortableColumn="installmentPremium">Installment Premium <p-sortIcon field="installmentPremium"></p-sortIcon></th>
+                        <th pSortableColumn="sumAssured">Sum Assured <p-sortIcon field="sumAssured"></p-sortIcon></th>
+                        <th pSortableColumn="approvalStatus">Approval Status <p-sortIcon field="approvalStatus"></p-sortIcon></th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-product let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <a href="#" (click)="toggleRowExpansion(product, $event)">
+                                <i [ngClass]="expandedRowKeys[product.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.type }}</td>
+                        <td>{{ product.frequency }}</td>
+                        <td>{{ product.premiumTerm }}</td>
+                        <td>{{ product.installmentType }}</td>
+                        <td>{{ product.installmentPremium }}</td>
+                        <td>{{ product.sumAssured }}</td>
+                        <td>{{ product.approvalStatus }}</td>
+                        <td>
+                            <div class="flex">
+                                <ng-container *ngIf="isMakerUser">
+                                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editProduct(product)"></button>
+                                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteProduct(product)"></button>
+                                </ng-container>
+
+                                <ng-container *ngIf="!isMakerUser && product.approvalStatus !== 'Approved'">
+                                    <button pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-info" (click)="approveProduct(product)"></button>
+                                </ng-container>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <!-- Row Expansion Template -->
+                <ng-template pTemplate="rowexpansion" let-product>
+                    <tr>
+                        <td colspan="20">
+                            <div class="expanded-content">
+                                <table class="table">
+                                    <tr>
+                                        <td><strong>ID:</strong></td><td>{{ product.id }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong>UIN Number:</strong></td><td>{{ product.uinNumber }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Age at Entry:</strong></td><td>{{ product.ageAtEntry }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong>Clawback:</strong></td><td>{{ product.clawback }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Product Launch Date:</strong></td><td>{{ product.productLaunchDate | date:'yyyy-MM-dd' }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong>Product Exit Date:</strong></td><td>{{ product.productExitDate | date:'yyyy-MM-dd' }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Annuity Purchase Price:</strong></td><td>{{ product.annuityPurchasePrice | currency:'INR' }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                    <!-- Add more rows here if needed -->
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+
+        <!-- Delete Product Dialogs -->
+        <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected products?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

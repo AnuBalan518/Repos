@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProfileRoutingModule } from './profile-routing.module';
+import { EmployeeRoutingModule } from './employee-routing.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
     imports: [
         CommonModule,
-        ProfileRoutingModule
+        EmployeeRoutingModule
     ],
     declarations: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ProfileModule { }
+export class EmployeeModule { }

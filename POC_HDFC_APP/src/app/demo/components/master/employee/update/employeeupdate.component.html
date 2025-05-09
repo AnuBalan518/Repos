@@ -1,0 +1,118 @@
+<form [formGroup]="employeeForm" (ngSubmit)="save()">
+    <div class="card">
+        <span class="text-900 text-xl font-bold mb-4 block">Employee Profile</span>
+
+        <div class="grid formgrid p-fluid">
+
+            <!-- First Name -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="firstname" class="font-medium text-900 required">First Name</label>
+                <input id="firstname" type="text" pInputText formControlName="firstname"
+                       [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('firstname')?.invalid && employeeForm.get('firstname')?.touched }" />
+                <small class="p-error" *ngIf="employeeForm.get('firstname')?.touched && employeeForm.get('firstname')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    First Name is required.
+                </small>
+            </div>
+
+            <!-- Last Name -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="lastname" class="font-medium text-900 required">Last Name</label>
+                <input id="lastname" type="text" pInputText formControlName="lastname"
+                       [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('lastname')?.invalid && employeeForm.get('lastname')?.touched }" />
+                <small class="p-error" *ngIf="employeeForm.get('lastname')?.touched && employeeForm.get('lastname')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Last Name is required.
+                </small>
+            </div>
+
+            <!-- Username -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="username" class="font-medium text-900 required">Username</label>
+                <input id="username" type="text" pInputText formControlName="username"
+                       [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('username')?.invalid && employeeForm.get('username')?.touched }" />
+                <small class="p-error" *ngIf="employeeForm.get('username')?.touched && employeeForm.get('username')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Username is required.
+                </small>
+            </div>
+
+            <!-- Password -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="password" class="font-medium text-900 required">Password</label>
+                <input id="password" type="password" pInputText formControlName="password" autocomplete="current-password"
+                       [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('password')?.invalid && employeeForm.get('password')?.touched }" />
+                <small class="p-error" *ngIf="employeeForm.get('password')?.touched && employeeForm.get('password')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Password is required.
+                </small>
+            </div>
+
+            <!-- Email -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="email" class="font-medium text-900 required">Email</label>
+                <input
+                    id="email"
+                    type="email"
+                    pInputText
+                    formControlName="email"
+                    [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched }"
+                />
+                <!-- Error messages for email field -->
+                <small class="p-error" *ngIf="employeeForm.get('email')?.touched && employeeForm.get('email')?.hasError('required')">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Email is required.
+                </small>
+                <small class="p-error" *ngIf="employeeForm.get('email')?.touched && employeeForm.get('email')?.hasError('email')">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Enter a valid email address.
+                </small>
+            </div>
+
+
+            <!-- Mobile -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="mobile" class="font-medium text-900 required">Mobile</label>
+                <input
+                    id="mobile"
+                    type="text"
+                    pInputText
+                    formControlName="mobile"
+                    [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('mobile')?.invalid && employeeForm.get('mobile')?.touched }"
+                />
+                <small class="p-error" *ngIf="employeeForm.get('mobile')?.touched && employeeForm.get('mobile')?.hasError('required')">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Mobile number is required.
+                </small>
+                <small class="p-error" *ngIf="employeeForm.get('mobile')?.touched && employeeForm.get('mobile')?.hasError('pattern')">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Enter a valid 10-digit mobile number.
+                </small>
+            </div>
+
+            <!-- Role -->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="roles" class="font-medium text-900 required">Role</label>
+                <p-dropdown id="role" [options]="roles" optionLabel="name" optionValue="code"
+                            formControlName="role" placeholder="Select Role"
+                            [ngClass]="{ 'ng-invalid ng-dirty': employeeForm.get('role')?.invalid && employeeForm.get('role')?.touched }"></p-dropdown>
+                <small class="p-error" *ngIf="employeeForm.get('role')?.touched && employeeForm.get('role')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Role is required.
+                </small>
+            </div>
+        </div>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+
+            </ng-template>
+            <ng-template pTemplate="right">
+                <button pButton pRipple class="p-button-danger p-button-outlined mr-2" label="Discard" (click)="discard()"
+                        icon="pi pi-fw pi-trash"></button>
+                <button pButton pRipple class="p-button-primary border-round" label="Save" type="submit"
+                        icon="pi pi-fw pi-check"></button>
+            </ng-template>
+        </p-toolbar>
+
+    </div>
+</form>

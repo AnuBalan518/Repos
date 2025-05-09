@@ -73,3 +73,13 @@
     }
   }
 }
+
+.center-error {
+  display: block;
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  color: #f44336; /* Red color for error */
+  font-size: 14px;
+}
+

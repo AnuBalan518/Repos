@@ -7,11 +7,16 @@ import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
+import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
+
 @NgModule({
     imports: [
         AppLayoutModule,
         AppRoutingModule,
-        BrowserModule, HttpClientModule
+        BrowserModule, HttpClientModule,
+        TableModule,
+        CheckboxModule
     ],
     declarations: [
         AppComponent,

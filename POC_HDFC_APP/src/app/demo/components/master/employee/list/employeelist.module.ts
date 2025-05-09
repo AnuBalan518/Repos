@@ -5,23 +5,25 @@ import { RippleModule } from 'primeng/ripple';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ProfileCreateComponent } from './profilecreate.component';
-import { ProfileCreateRoutingModule } from './profilecreate-routing.module';
+import { EmployeeListComponent } from './employeelist.component';
+import { EmployeeListRoutingModule } from './employeelist-routing.module';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CalendarModule } from 'primeng/calendar';
-import { ToolbarModule } from 'primeng/toolbar';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
-import { TagModule } from 'primeng/tag';
+import { ToolbarModule } from 'primeng/toolbar';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
 	imports: [
 		CommonModule,
 		FormsModule,
-		ProfileCreateRoutingModule,
 		ButtonModule,
 		RippleModule,
 		InputTextModule,
@@ -35,8 +37,15 @@ import { TagModule } from 'primeng/tag';
 		ToolbarModule,
 		ReactiveFormsModule,
 		CheckboxModule,
-		TagModule
+		EmployeeListRoutingModule,
+		DialogModule,
+		TableModule,
+
+
+
+            ToastModule,
+            ConfirmDialogModule,
 	],
-	declarations: [ProfileCreateComponent]
+	declarations: [EmployeeListComponent]
 })
-export class ProfileCreateModule { }
+export class EmployeeListModule { }

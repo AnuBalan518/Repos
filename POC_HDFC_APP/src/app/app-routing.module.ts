@@ -66,6 +66,8 @@ const routes: Routes = [
           { path: 'ecommerce', data: { breadcrumb: 'E-Commerce' }, loadChildren: () => import('./demo/components/ecommerce/ecommerce.module').then(m => m.EcommerceModule) },
           { path: 'apps', data: { breadcrumb: 'Apps' }, loadChildren: () => import('./demo/components/apps/apps.module').then(m => m.AppsModule) },
           { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
+          //{ path: 'employee', loadChildren: () => import('./demo/components/master/master.module').then(m => m.MasterModule) },
+          { path: 'master', loadChildren: () => import('./demo/components/master/master.module').then(m => m.MasterModule) },
           { path: 'notfound', loadChildren: () => import('./demo/components/notfound/notfound.module').then(m => m.NotfoundModule) },
       ]
     },

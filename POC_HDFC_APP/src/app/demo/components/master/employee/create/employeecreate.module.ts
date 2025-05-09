@@ -7,21 +7,19 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { FileUploadModule } from 'primeng/fileupload';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ProfileCreateComponent } from './profilecreate.component';
-import { ProfileCreateRoutingModule } from './profilecreate-routing.module';
+import { EmployeeCreateComponent } from './employeecreate.component';
+import { EmployeeCreateRoutingModule } from './employeecreate-routing.module';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CalendarModule } from 'primeng/calendar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CheckboxModule } from 'primeng/checkbox';
-import { TagModule } from 'primeng/tag';
 
 @NgModule({
 	imports: [
 		CommonModule,
 		FormsModule,
-		ProfileCreateRoutingModule,
 		ButtonModule,
 		RippleModule,
 		InputTextModule,
@@ -35,8 +33,8 @@ import { TagModule } from 'primeng/tag';
 		ToolbarModule,
 		ReactiveFormsModule,
 		CheckboxModule,
-		TagModule
+		EmployeeCreateRoutingModule
 	],
-	declarations: [ProfileCreateComponent]
+	declarations: [EmployeeCreateComponent]
 })
-export class ProfileCreateModule { }
+export class EmployeeCreateModule { }

@@ -3,11 +3,11 @@ import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { LoginService } from '../../../service/login.service';
+import { EmployeeService } from '../../../service/employee.service';
 
 @Component({
     templateUrl: './crud.component.html',
-    providers: [MessageService, ConfirmationService, LoginService]
+    providers: [MessageService, ConfirmationService, EmployeeService]
 })
 export class CrudComponent implements OnInit {
 
@@ -32,14 +32,14 @@ export class CrudComponent implements OnInit {
     rowsPerPageOptions = [5, 10, 20];
     isMakerUser = false;
     constructor(
-        public loginService: LoginService,
+        public employeeService: EmployeeService,
         private productService: ProductService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService) {
             console.log('Constructor called');}
 
     ngOnInit() {
-        this.isMakerUser = this.loginService.isMaker();
+        this.isMakerUser = this.employeeService.isMaker();
         console.log("User Top bar Role:", this.isMakerUser)
         this.productService.getProducts().then(data => this.products = data);
 
