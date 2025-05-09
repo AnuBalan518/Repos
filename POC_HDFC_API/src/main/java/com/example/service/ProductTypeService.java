@@ -26,6 +26,7 @@ public class ProductTypeService {
 	private AppConfigRepository appConfigRepository;
 
 	public ProductType save(ProductTypeDTO productType) {
+
 		return repository.save(toEntity(productType));
 	}
 
@@ -48,9 +49,9 @@ public class ProductTypeService {
 				.collect(Collectors.toList());
 	}
 
-	public ProductType updateApprovalStatus(Integer id, String approvalStatus) {
+	public ProductType updateApprovalStatus(Integer id, String approvalstatus) {
 		ProductType productType = repository.findById(id).orElseThrow(() -> new RuntimeException("ProductType not found"));
-		productType.setApprovalstatus(approvalStatus); // Assuming there's a setter for approvalStatus
+		productType.setApprovalstatus(approvalstatus); // Assuming there's a setter for approvalStatus
 		return repository.save(productType);
 	}
 
@@ -84,7 +85,7 @@ public class ProductTypeService {
 		dto.setClawback(pt.getClawback());
 		dto.setCreatedAt(pt.getCreatedAt());
 		dto.setUpdatedAt(pt.getUpdatedAt());
-		dto.setApprovalStatus(pt.getApprovalstatus());
+		dto.setApprovalstatus(pt.getApprovalstatus());
 		dto.setStatus(pt.getStatus());
 		System.out.println("Received Launch Date: " + pt.getProductLaunchDate());
 		return dto;

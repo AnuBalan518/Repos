@@ -70,13 +70,13 @@
                         <th pSortableColumn="installmentType">Installment Type <p-sortIcon field="installmentType"></p-sortIcon></th>
                         <th pSortableColumn="installmentPremium">Installment Premium <p-sortIcon field="installmentPremium"></p-sortIcon></th>
                         <th pSortableColumn="sumAssured">Sum Assured <p-sortIcon field="sumAssured"></p-sortIcon></th>
-<!--                        <th pSortableColumn="approvalStatus">Approval Status <p-sortIcon field="approvalStatus"></p-sortIcon>-->
-<!--                            <p-columnFilter type="text" field="approvalStatus"
+<!--                        <th pSortableColumn="approvalstatus">Approval Status <p-sortIcon field="approvalstatus"></p-sortIcon>-->
+<!--                            <p-columnFilter type="text" field="approvalstatus"
                                     display="menu" placeholder="Search by Approval Status"></p-columnFilter>-->
                         <th>
                             <div class="flex justify-content-between align-items-center">
                                 Approval Status
-                                <p-columnFilter field="approvalStatus" matchMode="equals" display="menu">
+                                <p-columnFilter field="approvalstatus" matchMode="equals" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                         <p-dropdown [ngModel]="value" [options]="approvalStatusOptions" (onChange)="filter($event.value)" placeholder="Any" [style]="{'min-width': '12rem'}" >
                                             <ng-template let-option pTemplate="item">
@@ -100,7 +100,7 @@
                         </td>
                         <td>
                             <p-tableCheckbox [value]="product" [disabled]="!isProductEnabled(product)">
-<!--                                             [disabled]="product.approvalStatus == 'Approved' || product.approvalStatus == 'Rejected'">-->
+<!--                                             [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'">-->
                             </p-tableCheckbox>
                         </td>
                         <td>{{ product.name }}</td>
@@ -110,10 +110,10 @@
                         <td>{{ product.installmentType }}</td>
                         <td>{{ product.installmentPremium }}</td>
                         <td>{{ product.sumAssured }}</td>
-<!--                        <td>{{ product.approvalStatus }}</td>-->
+<!--                        <td>{{ product.approvalstatus }}</td>-->
                         <td>
-                            <span [class]="'approvalstatus-badge approvalstatus-' + product.approvalStatus.toLowerCase()">
-                                {{ product.approvalStatus }}
+                            <span [class]="'approvalstatus-badge approvalstatus-' + product.approvalstatus?.toLowerCase()">
+                                {{ product.approvalstatus }}
                             </span>
                         </td>
                         <td>
@@ -128,14 +128,14 @@
                                     <button pButton pRipple icon="pi pi-check"
                                             class="p-button-rounded p-button-info mr-2"
                                             (click)="approveProduct(product)"
-                                            [disabled]="product.approvalStatus == 'Approved' || product.approvalStatus == 'Rejected'"
+                                            [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'"
                                     ></button>
 
                                     <!-- Reject Button -->
                                     <button pButton pRipple icon="pi pi-times"
                                             class="p-button-rounded p-button-danger"
                                             (click)="rejectProduct(product)"
-                                            [disabled]="product.approvalStatus == 'Approved' || product.approvalStatus == 'Rejected'"
+                                            [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'"
                                     ></button>
 
                                 </ng-container>

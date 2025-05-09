@@ -132,7 +132,7 @@ export class ProfileUpdateComponent implements OnInit {
             clawback: form['clawback']?.value ? 'Y' : 'N',
             createdAt: this.createdDate,//new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            approvalStatus: 'New',
+            approvalstatus: 'New',
             status: 'A'
         };
         console.log(productType)

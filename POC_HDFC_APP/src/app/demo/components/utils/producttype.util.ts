@@ -24,7 +24,7 @@ export function createDefaultProductType(): ProductType {
     clawback: '',
     createdAt: now,
     updatedAt: now,
-    approvalStatus: '',
+    approvalstatus: '',
     status: ''
   };
 }

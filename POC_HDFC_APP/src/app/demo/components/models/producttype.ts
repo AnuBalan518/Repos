@@ -20,6 +20,6 @@ export interface ProductType {
   clawback: string;
   createdAt: string;          // Use string to represent date as ISO string
   updatedAt: string;          // Use string to represent date as ISO string
-  approvalStatus: string,
+  approvalstatus: string,
   status: string
 }

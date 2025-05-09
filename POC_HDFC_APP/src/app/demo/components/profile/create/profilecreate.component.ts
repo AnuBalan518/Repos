@@ -127,7 +127,7 @@ export class ProfileCreateComponent implements OnInit {
             clawback: form['clawback']?.value ? 'Y' : 'N',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            approvalStatus: 'New',
+            approvalstatus: 'New',
             status: 'A'
         };
 
@@ -137,7 +137,7 @@ export class ProfileCreateComponent implements OnInit {
             next: (res: any) => console.log('Saved', res),
             error: (err: any) => console.error('Error', err)
         })
-        this.router.navigateByUrl('/profile/list');
+       // this.router.navigateByUrl('/profile/list');
     }
 
     discard() {

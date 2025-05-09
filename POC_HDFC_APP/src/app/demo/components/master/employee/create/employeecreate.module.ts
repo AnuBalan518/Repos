@@ -15,6 +15,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { CalendarModule } from 'primeng/calendar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmationService } from 'primeng/api/confirmationservice';
 
 @NgModule({
 	imports: [
@@ -35,6 +36,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 		CheckboxModule,
 		EmployeeCreateRoutingModule
 	],
-	declarations: [EmployeeCreateComponent]
+	declarations: [EmployeeCreateComponent],
 })
 export class EmployeeCreateModule { }

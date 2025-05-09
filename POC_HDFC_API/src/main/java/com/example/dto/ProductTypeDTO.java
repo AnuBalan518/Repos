@@ -100,8 +100,8 @@ public class ProductTypeDTO {
     private LocalDateTime updatedAt;
 
     @NotBlank(message = "ApprovalStatus is mandatory")
-    @Column(nullable = false)
-    private String approvalStatus;
+    @Column(nullable = true)
+    private String approvalstatus;
 
     @NotBlank(message = "Status is mandatory")
     @Column(nullable = false)
@@ -277,12 +277,12 @@ public class ProductTypeDTO {
         this.updatedAt = updatedAt;
     }
 
-    public String getApprovalStatus() {
-        return approvalStatus;
+    public String getApprovalstatus() {
+        return approvalstatus;
     }
 
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
+    public void setApprovalstatus(String approvalstatus) {
+        this.approvalstatus = approvalstatus;
     }
 
     public String getStatus() {

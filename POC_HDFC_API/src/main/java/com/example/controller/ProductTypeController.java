@@ -25,6 +25,7 @@ public class ProductTypeController {
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody ProductTypeDTO dto) {
 		//service.validateBusinessRules(dto);
+		System.out.println("Request URI: " + dto);
 		ProductType created = service.save(dto);
 		return ResponseEntity.ok(created);
 	}
@@ -58,7 +59,7 @@ public class ProductTypeController {
 	@PutMapping("/approve/{id}")
 	@PreAuthorize("hasRole('checker')")
 	public ResponseEntity<?> approve(@PathVariable Integer id) {
-		// Assuming you are not updating the other fields, just the approvalStatus
+		// Assuming you are not updating the other fields, just the approvalstatus
 		ProductType updated = service.updateApprovalStatus(id, "Approved");
 		return ResponseEntity.ok(updated);
 	}

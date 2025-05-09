@@ -262,7 +262,7 @@ public class ProductType {
 		return approvalstatus;
 	}
 
-	public void setApprovalstatus(String approvalStatus) {
+	public void setApprovalstatus(String approvalstatus) {
 		this.approvalstatus = approvalstatus;
 	}
 

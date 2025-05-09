@@ -296,7 +296,7 @@ export class ProfileListComponent implements OnInit {
 
      isProductEnabled(product: ProductType): boolean {
             // Replace with your own logic to determine enabled state
-            return product.approvalStatus !== 'Approved' && product.approvalStatus !== 'Rejected';
+            return product.approvalstatus !== 'Approved' && product.approvalstatus !== 'Rejected';
         }
 
     get isAllEnabledSelected(): boolean {
@@ -322,16 +322,16 @@ export class ProfileListComponent implements OnInit {
                         ...this.selectedProducts,
                         ...this.products.filter(
                             product => this.isProductEnabled(product) &&
-                                                           product.approvalStatus !== 'Approved' && // Exclude approved products
-                                                           product.approvalStatus !== 'Rejected' && // Exclude rejected products
+                                                           product.approvalstatus !== 'Approved' && // Exclude approved products
+                                                           product.approvalstatus !== 'Rejected' && // Exclude rejected products
                                                            !this.selectedProducts.includes(product) // Avoid duplicates
                         )
                     ];
                 } else {
                     this.selectedProducts = this.selectedProducts.filter(
                         product => !this.isProductEnabled(product) &&
-                                                       product.approvalStatus !== 'Approved' && // Exclude approved products
-                                                       product.approvalStatus !== 'Rejected' && // Exclude rejected products
+                                                       product.approvalstatus !== 'Approved' && // Exclude approved products
+                                                       product.approvalstatus !== 'Rejected' && // Exclude rejected products
                                                        !this.selectedProducts.includes(product) // Avoid duplicates
                     );
                 }

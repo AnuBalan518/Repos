@@ -58,18 +58,10 @@ export class OverlaysDemoComponent implements OnInit {
         });
     }
 
-    confirm2(event: Event) {
+    confirm2() {
         this.confirmationService.confirm({
-            key: 'confirm2',
-            target: event.target || new EventTarget,
-            message: 'Are you sure that you want to proceed?',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
-            },
-            reject: () => {
-                this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-            }
+            key: 'confirm1',
+            message: 'Are you sure to perform this action?'
         });
     }
 
