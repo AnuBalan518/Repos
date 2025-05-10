@@ -107,7 +107,13 @@
 
             </ng-template>
             <ng-template pTemplate="right">
-                <button pButton pRipple class="p-button-danger p-button-outlined mr-2" label="Discard123" (click)="discard()"
+<!--                <button (click)="confirm2($event)" pButton icon="pi pi-check" label="Confirm"></button>-->
+<!--                <p-confirmPopup key="confirm2"></p-confirmPopup>-->
+<!--                <button pButton pRipple class="p-button-danger p-button-outlined mr-2"-->
+<!--                        label="Discard" (click)="discard($event)"-->
+<!--                        icon="pi pi-fw pi-trash"></button>-->
+<!--                <p-confirmPopup key="confirm2"></p-confirmPopup>-->
+                <button pButton pRipple class="p-button-danger p-button-outlined mr-2" label="Discard" (click)="discard()"
                         icon="pi pi-fw pi-trash"></button>
                 <button pButton pRipple class="p-button-primary border-round" label="Save" type="submit"
                         icon="pi pi-fw pi-check"></button>

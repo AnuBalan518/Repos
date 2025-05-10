@@ -4,17 +4,22 @@ import { Router } from '@angular/router';
 import { EmployeeService } from '../../../../service/employee.service';
 import { AppConfig } from "../../../models/appconfig";
 import { Employee } from "../../../models/employee";
-import { ConfirmationService, MessageService } from 'primeng/api';
+//import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
-    templateUrl: './employeecreate.component.html'
+    templateUrl: './employeecreate.component.html',
+    //providers: [MessageService, ConfirmationService]
 })
 export class EmployeeCreateComponent implements OnInit {
 
     employeeForm!: FormGroup;
     roles: any[] = [];
     constructor(private router: Router,private fb: FormBuilder,
-        private employeeService: EmployeeService,private confirmationService: ConfirmationService, private messageService: MessageService) {
+        private employeeService: EmployeeService,
+        //private confirmationService: ConfirmationService,
+        //private messageService: MessageService
+        )
+    {
 
     }
 
@@ -88,18 +93,35 @@ export class EmployeeCreateComponent implements OnInit {
             }
         });
     }
+//     discard() {
+//         this.confirmationService.confirm({
+//             key: 'confirm1',
+//             message: 'Are you sure to perform this action?'
+//         });
+//     }
     discard() {
-        this.confirmationService.confirm({
-            key: 'confirm1',
-            message: 'Are you sure to perform this action?'
-        });
+        // Confirmation before navigation
+
+        if (confirm('Are you sure you want to discard changes?')) {
+            this.router.navigateByUrl('/master/employee/list');
+        }
     }
-    // discard1() {
-    //     // Confirmation before navigation
-        
-    //     if (confirm('Are you sure you want to discard changes?')) {
-    //         this.router.navigateByUrl('/master/employee/list');
-    //     }
-    // }
+
+//     discard(event: Event): void {
+//         this.confirmationService.confirm({
+//             key: 'confirm2',
+//             target: event.target || new EventTarget,
+//             message: 'Are you sure you want to discard changes?',
+//             icon: 'pi pi-exclamation-triangle',
+//             accept: () => {
+//                 // Navigate to the employee list upon confirmation
+//                 this.router.navigateByUrl('/master/employee/list');
+//             },
+//             reject: () => {
+//                 // Optional: Show a message or handle rejection
+//                 this.messageService.add({ severity: 'info', summary: 'Cancelled', detail: 'Discard action cancelled' });
+//             }
+//         });
+//     }
 
 }
