@@ -1,9 +1,12 @@
 <form [formGroup]="profileForm" (ngSubmit)="save()">
     <div class="card">
-      <span class="text-900 text-xl font-bold mb-4 block">Product Setup</span>
-        <p-tag icon="pi pi-info-circle" severity="info" value="Peak Point" />
+        <div class="flex items-center">
+            <span class="text-900 text-xl font-bold mr-2">Product Setup</span>
+            <p-tag icon="pi pi-info-circle" severity="info" value="Peak Point"></p-tag>
+        </div>
 
-      <div class="grid formgrid p-fluid">
+
+        <div class="grid formgrid p-fluid">
         <div class="field mb-4 col-12 md:col-4">
           <label for="productName" class="font-medium text-900 required">Product Name</label>
           <input id="productName" type="text" pInputText formControlName="productName"
@@ -179,7 +182,19 @@
             </small>
         </div>
         <div class="col-12 md:col-4 field" style="padding-top: 30px;!important">
-            <p-checkbox name="checkbox-1"  [binary]="true" label="Claw Back" class="text-900" inputId="id"></p-checkbox>
+            <p-checkbox
+                formControlName="clawback"
+                name="clawback"
+                [binary]="true"
+                label="Claw Back"
+                class="text-900"
+                inputId="clawbackCheckbox">
+            </p-checkbox>
+
+            <!--            <p-checkbox formControlName="clawback"-->
+<!--                        name="checkbox-1"-->
+<!--                        [binary]="true"-->
+<!--                        label="Claw Back" class="text-900" inputId="id"></p-checkbox>-->
         </div>
       </div>
 

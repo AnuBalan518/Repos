@@ -43,6 +43,7 @@ export class ProfileCreateComponent implements OnInit {
             singlePremium: ['', Validators.required],
             sumAssured: ['', Validators.required],
             //launchDateInput: ['', Validators.required],
+            clawback: [false],
             launchDate: [null, Validators.required],
             exitDate: [null, Validators.required]
           });
@@ -103,7 +104,8 @@ export class ProfileCreateComponent implements OnInit {
 //             createdAt: new Date().toISOString(),
 //             updatedAt: new Date().toISOString()
 //             }
-
+        const clawbackValue = this.profileForm.get('clawback')?.value;
+        console.log('Clawback Value:', clawbackValue);
         const productType: ProductType = {
             id: 0, // or existing ID if editing
             name: form['productName'].value,
@@ -124,7 +126,8 @@ export class ProfileCreateComponent implements OnInit {
             sumAssured: +form['sumAssured'].value,
             productLaunchDate: new Date(form['launchDate'].value).toISOString(),
             productExitDate: new Date(form['exitDate'].value).toISOString(),
-            clawback: form['clawback']?.value ? 'Y' : 'N',
+            //clawback: form['clawback']?. 'Y' : 'N',
+            clawback: clawbackValue ? 'Y' : 'N',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
             approvalstatus: 'New',
