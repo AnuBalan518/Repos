@@ -1,3 +1,4 @@
+<!--<div class="form-container" style="max-height: 80vh; overflow-y: auto; padding-right: 1rem;">-->
 <form [formGroup]="profileForm" (ngSubmit)="save()">
     <div class="card">
         <div class="flex items-center mb-5">
@@ -5,24 +6,34 @@
             <p-tag icon="pi pi-info-circle" severity="info" value="Peak Point"></p-tag>
         </div>
 
-
         <div class="grid formgrid p-fluid">
         <div class="field mb-4 col-12 md:col-4">
           <label for="productName" class="font-medium text-900 required">Product Name</label>
-          <input id="productName" type="text" pInputText formControlName="productName"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('productName')?.invalid && profileForm.get('productName')?.touched }" />
-          <small class="p-error" *ngIf="profileForm.get('productName')?.touched && profileForm.get('productName')?.invalid">
+          <input id="name" type="text" pInputText formControlName="name"
+                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('name')?.invalid && profileForm.get('name')?.touched }" />
+          <small class="p-error" *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid">
             <i class="pi pi-exclamation-circle"></i>
             Product Name is required.
           </small>
         </div>
 
+
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="planCode" class="font-medium text-900 required">Plan Code</label>
+                <input id="plan_code" type="text" pInputText formControlName="plan_code"
+                       [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('plan_code')?.invalid && profileForm.get('plan_code')?.touched }" />
+                <small class="p-error" *ngIf="profileForm.get('plan_code')?.touched && profileForm.get('plan_code')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Plan Code is required.
+                </small>
+            </div>
+
         <div class="field mb-4 col-12 md:col-4">
           <label for="productType" class="font-medium text-900 required">Product Type</label>
-          <p-dropdown inputId="productType" [options]="productTypes" optionLabel="name" optionValue="code" [filter]="true"
-                      formControlName="productType" placeholder="Select Product Type"
-                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('productType')?.invalid && profileForm.get('productType')?.touched }"></p-dropdown>
-          <small class="p-error" *ngIf="profileForm.get('productType')?.touched && profileForm.get('productType')?.invalid">
+          <p-dropdown inputId="type" [options]="productTypes" optionLabel="name" optionValue="code" [filter]="true"
+                      formControlName="type" placeholder="Select Product Type"
+                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('type')?.invalid && profileForm.get('type')?.touched }"></p-dropdown>
+          <small class="p-error" *ngIf="profileForm.get('type')?.touched && profileForm.get('type')?.invalid">
             <i class="pi pi-exclamation-circle"></i>
             Product Type is required.
           </small>
@@ -38,139 +49,198 @@
           </small>
         </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="intermediary" class="font-medium text-900 required">Intermediary</label>
-          <p-dropdown id="intermediary" [options]="intermediatries" optionLabel="name" optionValue="code"
-                      formControlName="intermediary" placeholder="Select Intermediary"
-                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('intermediary')?.invalid && profileForm.get('intermediary')?.touched }"></p-dropdown>
-          <small class="p-error" *ngIf="profileForm.get('intermediary')?.touched && profileForm.get('intermediary')?.invalid">
-            <i class="pi pi-exclamation-circle"></i>
-            Intermediary is required.
-          </small>
-        </div>
+<!--        <div class="field mb-4 col-12 md:col-4">-->
+<!--          <label for="intermediary" class="font-medium text-900 required">Intermediary</label>-->
+<!--          <p-dropdown id="intermediary" [options]="intermediatries" optionLabel="name" optionValue="code"-->
+<!--                      formControlName="intermediary" placeholder="Select Intermediary"-->
+<!--                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('intermediary')?.invalid && profileForm.get('intermediary')?.touched }"></p-dropdown>-->
+<!--          <small class="p-error" *ngIf="profileForm.get('intermediary')?.touched && profileForm.get('intermediary')?.invalid">-->
+<!--            <i class="pi pi-exclamation-circle"></i>-->
+<!--            Intermediary is required.-->
+<!--          </small>-->
+<!--        </div>-->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="intermediary" class="font-medium text-900 required">Intermediary</label>
+                <p-multiSelect id="intermediary" [options]="intermediatries" optionLabel="name" optionValue="code"
+                               formControlName="intermediary" placeholder="Select Intermediary"
+                               [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('intermediary')?.invalid && profileForm.get('intermediary')?.touched }"></p-multiSelect>
+                <small class="p-error" *ngIf="profileForm.get('intermediary')?.touched && profileForm.get('intermediary')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    At least one intermediary is required.
+                </small>
+            </div>
 
-        <div class="field mb-4 col-12 md:col-4">
+            <div class="field mb-4 col-12 md:col-4">
           <label for="frequency" class="font-medium text-900 required">Frequency</label>
-          <p-dropdown id="frequency" [options]="frequency" optionLabel="name" optionValue="code"
+          <p-multiSelect id="frequency" [options]="frequency" optionLabel="name" optionValue="code"
                       formControlName="frequency" placeholder="Select Frequency"
-                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('frequency')?.invalid && profileForm.get('frequency')?.touched }"></p-dropdown>
+                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('frequency')?.invalid && profileForm.get('frequency')?.touched }"></p-multiSelect>
           <small class="p-error" *ngIf="profileForm.get('frequency')?.touched && profileForm.get('frequency')?.invalid">
             <i class="pi pi-exclamation-circle"></i>
             Frequency is required.
           </small>
         </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="ageAtEntry" class="font-medium text-900 required">Age at Entry</label>
-          <input id="ageAtEntry" type="number" pInputText formControlName="ageAtEntry"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('ageAtEntry')?.invalid && profileForm.get('ageAtEntry')?.touched }" />
-          <small class="p-error" *ngIf="profileForm.get('ageAtEntry')?.touched && profileForm.get('ageAtEntry')?.invalid">
-            <i class="pi pi-exclamation-circle"></i>
-            Valid age is required (0-120).
-          </small>
-        </div>
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #ageAtEntryComponent
+                                     actualMinValue="21"
+                                     actualMaxValue="99"
+                                     fieldName="Age At Entry"
+                                     (valueChange)="updateMinMaxValues('ageAtEntry', $event)"
+                ></app-min-max-display>
+            </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="maturityAge" class="font-medium text-900 required">Maturity Age</label>
-          <input id="maturityAge" type="number" pInputText formControlName="maturityAge"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('maturityAge')?.invalid && profileForm.get('maturityAge')?.touched }" />
-          <small class="p-error" *ngIf="profileForm.get('maturityAge')?.touched && profileForm.get('maturityAge')?.invalid">
-            <i class="pi pi-exclamation-circle"></i>
-            Maturity Age is required.
-          </small>
-        </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="premiumTerm" class="font-medium text-900 required">Premium Term</label>
-          <input id="premiumTerm" type="number" pInputText formControlName="premiumTerm"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('premiumTerm')?.invalid && profileForm.get('premiumTerm')?.touched }" />
-            <small class="p-error" *ngIf="profileForm.get('premiumTerm')?.touched && profileForm.get('premiumTerm')?.invalid">
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #maturityAgeComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Maturity Age"
+                                     (valueChange)="updateMinMaxValues('maturityAge', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #regularPremiumComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Regular Premium"
+                                     (valueChange)="updateMinMaxValues('regularPremium', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="premiumType" class="font-medium text-900 required">Premium Type</label>
+                <p-multiSelect id="premiumtype" [options]="paymentOptions" optionLabel="name" optionValue="code"
+                            formControlName="premiumtype" placeholder="Select Premium Type"
+                            [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('premiumtype')?.invalid && profileForm.get('premiumtype')?.touched }"></p-multiSelect>
+                <small class="p-error" *ngIf="profileForm.get('premiumtype')?.touched && profileForm.get('premiumtype')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Premium Type is required.
+                </small>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+              <label for="limitedPremium1" class="font-medium text-900 required">Limited Premium 1</label>
+              <input id="limitedPremium1" type="number" pInputText formControlName="limitedPremium1"
+                     [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('limitedPremium1')?.invalid && profileForm.get('limitedPremium1')?.touched }" />
+              <small class="p-error" *ngIf="profileForm.get('limitedPremium1')?.touched && profileForm.get('limitedPremium1')?.invalid">
                 <i class="pi pi-exclamation-circle"></i>
-                Premium Term is required.
-            </small>
-        </div>
-
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="limitedPremiumTerm" class="font-medium text-900 required">Limited Premium Term</label>
-          <input id="limitedPremiumTerm" type="number" pInputText formControlName="limitedPremiumTerm"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('limitedPremiumTerm')?.invalid && profileForm.get('limitedPremiumTerm')?.touched }" />
-            <small class="p-error" *ngIf="profileForm.get('limitedPremiumTerm')?.touched && profileForm.get('limitedPremiumTerm')?.invalid">
-                <i class="pi pi-exclamation-circle"></i>
-                Limited Premium Term is required.
-            </small>
-        </div>
-
-          <div class="field mb-4 col-12 md:col-4">
-              <label for="installmentType" class="font-medium text-900 required">Payment Options</label>
-              <p-dropdown id="installmentType" [options]="paymentOptions" optionLabel="name" optionValue="code"
-                          formControlName="installmentType" placeholder="Select Payment Options"
-                          [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('paymentOptions')?.invalid && profileForm.get('installmentType')?.touched }"></p-dropdown>
-              <small class="p-error" *ngIf="profileForm.get('installmentType')?.touched && profileForm.get('installmentType')?.invalid">
-                  <i class="pi pi-exclamation-circle"></i>
-                  Payment Options is required.
+                  Limited Premium 1 must be a 2-digit number between 10 and 99.
               </small>
-          </div>
-<!--        <div class="field mb-4 col-12 md:col-8">-->
-<!--          <label class="font-medium text-900 required">Choose One</label>-->
-<!--          <p-selectButton [options]="paymentOptions"-->
-<!--          formControlName="chooseOne"  optionLabel="name"-->
-<!--          optionValue="value"-->
-<!--                          [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('chooseOne')?.invalid && profileForm.get('chooseOne')?.touched }"></p-selectButton>-->
-<!--          <small class="p-error" *ngIf="profileForm.get('chooseOne')?.touched && profileForm.get('chooseOne')?.invalid">-->
-<!--            <i class="pi pi-exclamation-circle"></i>-->
-<!--            Selection is required.-->
-<!--          </small>-->
-<!--        </div>-->
+            </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="installmentPremium" class="font-medium text-900 required">Installment Premium</label>
-          <input id="installmentPremium" type="number" pInputText formControlName="installmentPremium"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('installmentPremium')?.invalid && profileForm.get('installmentPremium')?.touched }" />
-            <small class="p-error" *ngIf="profileForm.get('installmentPremium')?.touched && profileForm.get('installmentPremium')?.invalid">
-                <i class="pi pi-exclamation-circle"></i>
-                Installment Premium is required.
-            </small>
-        </div>
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="limitedPremium2" class="font-medium text-900 required">Limited Premium 2</label>
+                <input id="limitedPremium2" type="number" pInputText formControlName="limitedPremium2"
+                       [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('limitedPremium2')?.invalid && profileForm.get('limitedPremium2')?.touched }" />
+                <small class="p-error" *ngIf="profileForm.get('limitedPremium2')?.touched && profileForm.get('limitedPremium2')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Limited Premium 2 must be a 2-digit number between 10 and 99.
+                </small>
+            </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="singlePremium" class="font-medium text-900 required">Single Premium</label>
-          <input id="singlePremium" type="number" pInputText formControlName="singlePremium"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('singlePremium')?.invalid && profileForm.get('singlePremium')?.touched }" />
-            <small class="p-error" *ngIf="profileForm.get('singlePremium')?.touched && profileForm.get('singlePremium')?.invalid">
-                <i class="pi pi-exclamation-circle"></i>
-                Single Premium is required.
-            </small>
-        </div>
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="limitedPremium3" class="font-medium text-900 required">Limited Premium 3</label>
+                <input id="limitedPremium3" type="number" pInputText formControlName="limitedPremium3"
+                       [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('limitedPremium3')?.invalid && profileForm.get('limitedPremium3')?.touched }" />
+                <small class="p-error" *ngIf="profileForm.get('limitedPremium3')?.touched && profileForm.get('limitedPremium3')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Limited Premium 3 must be a 2-digit number between 10 and 99.
+                </small>
+            </div>
 
-        <div class="field mb-4 col-12 md:col-4">
-          <label for="sumAssured" class="font-medium text-900 required">Sum Assured</label>
-          <input id="sumAssured" type="number" pInputText formControlName="sumAssured"
-                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('sumAssured')?.invalid && profileForm.get('sumAssured')?.touched }" />
-            <small class="p-error" *ngIf="profileForm.get('sumAssured')?.touched && profileForm.get('sumAssured')?.invalid">
-                <i class="pi pi-exclamation-circle"></i>
-                Sum Assured is required.
-            </small>
-        </div>
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="limitedPremium4" class="font-medium text-900 required">Limited Premium 4</label>
+                <input id="limitedPremium4" type="number" pInputText formControlName="limitedPremium4"
+                       [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('limitedPremium4')?.invalid && profileForm.get('limitedPremium4')?.touched }" />
+                <small class="p-error" *ngIf="profileForm.get('limitedPremium4')?.touched && profileForm.get('limitedPremium4')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Limited Premium 4 must be a 2-digit number between 10 and 99.
+                </small>
+            </div>
 
-<!--        <div class="field mb-4 col-12 md:col-4">-->
-<!--          <label for="launchDateInput" class="font-medium text-900 required">Launch Date (Input)</label>-->
-<!--          <input id="launchDateInput" type="text" pInputText formControlName="launchDateInput"-->
-<!--                 [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('launchDateInput')?.invalid && profileForm.get('launchDateInput')?.touched }" />-->
-<!--            <small class="p-error" *ngIf="profileForm.get('launchDateInput')?.touched && profileForm.get('launchDateInput')?.invalid">-->
-<!--                <i class="pi pi-exclamation-circle"></i>-->
-<!--                Launch Date Input is required.-->
-<!--            </small>-->
-<!--        </div>-->
+            <div class="col-12 md:col-4 field">
+                <label for="launchDate" class="text-900 required">Product Launch Date</label>
+                <p-calendar formControlName="launchDate" dateFormat="mm-dd-yy" [showIcon]="true"
+                            [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('launchDate')?.invalid && profileForm.get('launchDate')?.touched }"></p-calendar>
+                <small class="p-error" *ngIf="profileForm.get('launchDate')?.touched && profileForm.get('launchDate')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Launch Date is required.
+                </small>
+            </div>
 
-        <div class="col-12 md:col-4 field">
-          <label for="launchDate" class="text-900 required">Product Launch Date</label>
-          <p-calendar formControlName="launchDate" dateFormat="mm-dd-yy" [showIcon]="true"
-                      [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('launchDate')?.invalid && profileForm.get('launchDate')?.touched }"></p-calendar>
-            <small class="p-error" *ngIf="profileForm.get('launchDate')?.touched && profileForm.get('launchDate')?.invalid">
-                <i class="pi pi-exclamation-circle"></i>
-                Launch Date is required.
-            </small>
-        </div>
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #policyTermComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Policy Term"
+                                     (valueChange)="updateMinMaxValues('policyTerm', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #installmentPremiumYearlyComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Installment Premium Yearly"
+                                     (valueChange)="updateMinMaxValues('installmentPremiumYearly', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #installmentPremiumHalfYearlyComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Installment Premium Half Yearly"
+                                     (valueChange)="updateMinMaxValues('installmentPremiumHalfYearly', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #installmentPremiumQuarterlyComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Installment Premium Quarterly"
+                                     (valueChange)="updateMinMaxValues('installmentPremiumQuarterly', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #installmentPremiumMonthlyComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Installment Premium Monthly"
+                                     (valueChange)="updateMinMaxValues('installmentPremiumMonthly', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #singlePremiumAmountComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Single Premium Amount"
+                                     (valueChange)="updateMinMaxValues('singlePremiumAmount', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #annuityPurchasePriceComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Annuity Purchase Price"
+                                     (valueChange)="updateMinMaxValues('annuityPurchasePrice', $event)"
+                ></app-min-max-display>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <app-min-max-display #sumAssuredComponent
+                                     actualMinValue="41"
+                                     actualMaxValue="99"
+                                     fieldName="Sum Assured"
+                                     (valueChange)="updateMinMaxValues('sumAssured', $event)"
+                ></app-min-max-display>
+            </div>
 
         <div class="col-12 md:col-4 field">
           <label for="exitDate" class="text-900 required">Product Exit Date</label>
@@ -181,22 +251,73 @@
                 Exit Date is required.
             </small>
         </div>
-        <div class="col-12 md:col-4 field" style="padding-top: 30px;!important">
-            <p-checkbox
-                formControlName="clawback"
-                name="clawback"
-                [binary]="true"
-                label="Claw Back"
-                class="text-900"
-                inputId="clawbackCheckbox">
-            </p-checkbox>
 
-            <!--            <p-checkbox formControlName="clawback"-->
-<!--                        name="checkbox-1"-->
-<!--                        [binary]="true"-->
-<!--                        label="Claw Back" class="text-900" inputId="id"></p-checkbox>-->
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="clawBack" class="font-medium text-900 required">Claw Back</label>
+                <p-dropdown id="clawBack" [options]="applicable" optionLabel="name" optionValue="code"
+                            formControlName="clawBack" placeholder="Select Claw Back"
+                            [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('clawBack')?.invalid && profileForm.get('clawBack')?.touched }"></p-dropdown>
+                <small class="p-error" *ngIf="profileForm.get('clawBack')?.touched && profileForm.get('clawBack')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Claw Back is required.
+                </small>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="chequeClearance" class="font-medium text-900 required">Cheque Clearance</label>
+                <p-dropdown id="chequeClearance" [options]="applicable" optionLabel="name" optionValue="code"
+                            formControlName="chequeClearance" placeholder="Select Cheque Clearance"
+                            [ngClass]="{ 'ng-invalid ng-dirty': profileForm.get('chequeClearance')?.invalid && profileForm.get('chequeClearance')?.touched }"></p-dropdown>
+                <small class="p-error" *ngIf="profileForm.get('chequeClearance')?.touched && profileForm.get('chequeClearance')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Claw Back is required.
+                </small>
+            </div>
+
+<!--        <div class="col-12 md:col-4 field" style="padding-top: 30px;!important">-->
+<!--            <p-checkbox-->
+<!--                formControlName="bonusCommissionEligibility"-->
+<!--                name="bonusCommissionEligibility"-->
+<!--                [binary]="true"-->
+<!--                label="Bonus Commission Eligibility"-->
+<!--                class="text-900"-->
+<!--                inputId="bonusCommissionEligibilityCheckbox">-->
+<!--            </p-checkbox>-->
+<!--        </div>-->
+
+            <div class="col-12 md:col-4 field" style="padding-top: 30px;!important">
+                <p-checkbox formControlName="bonusCommissionEligibility"
+                            [binary]="true"
+                            label="Bonus Commission Eligibility"
+                            class="text-900"
+                            inputId="bonusCommissionEligibilityCheckbox"
+                            (onChange)="onBonusEligibilityChange($event)">
+                </p-checkbox>
+            </div>
+
+            <div class="field mb-4 col-12 md:col-4">
+                <label for="bonusCommissionPercentage" class="font-medium text-900 required">Bonus Commission Percentage</label>
+                <input
+                    id="bonusCommissionPercentage"
+                    type="number"
+                    pInputText
+                    formControlName="bonusCommissionPercentage"
+                    [ngClass]="{
+            'ng-invalid ng-dirty': profileForm.get('bonusCommissionPercentage')?.invalid &&
+                                   profileForm.get('bonusCommissionPercentage')?.touched
+        }"
+                />
+                <small
+                    class="p-error"
+                    *ngIf="profileForm.get('bonusCommissionPercentage')?.touched && profileForm.get('bonusCommissionPercentage')?.invalid">
+                    <i class="pi pi-exclamation-circle"></i>
+                    Bonus Commission Percentage must be a numeric value.
+                </small>
+            </div>
+
+
+
         </div>
-      </div>
 
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
@@ -205,9 +326,10 @@
         <ng-template pTemplate="right">
           <button pButton pRipple class="p-button-danger p-button-outlined mr-2" label="Discard" (click)="discard()"
                   icon="pi pi-fw pi-trash"></button>
-          <button pButton pRipple class="p-button-primary border-round" label="Save" type="submit"
+          <button pButton pRipple class="p-button-primary border-round" label="Save" type="submit" (click)="save()"
                   icon="pi pi-fw pi-check"></button>
         </ng-template>
       </p-toolbar>
     </div>
   </form>
+<!--</div>-->

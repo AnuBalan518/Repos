@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+
 @NgModule({
     imports: [
         CommonModule,

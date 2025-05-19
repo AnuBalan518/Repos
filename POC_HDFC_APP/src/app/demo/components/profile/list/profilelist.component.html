@@ -65,18 +65,18 @@
 <!--                        </th>-->
                         <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
                         <th pSortableColumn="type">Type <p-sortIcon field="type"></p-sortIcon></th>
+                        <th pSortableColumn="plan_code">Plan Code <p-sortIcon field="plan_code"></p-sortIcon></th>
+                        <th pSortableColumn="intermediary">Intermediary <p-sortIcon field="intermediary"></p-sortIcon></th>
                         <th pSortableColumn="frequency">Frequency <p-sortIcon field="frequency"></p-sortIcon></th>
-                        <th pSortableColumn="premiumTerm">Premium Term <p-sortIcon field="premiumTerm"></p-sortIcon></th>
-                        <th pSortableColumn="installmentType">Installment Type <p-sortIcon field="installmentType"></p-sortIcon></th>
-                        <th pSortableColumn="installmentPremium">Installment Premium <p-sortIcon field="installmentPremium"></p-sortIcon></th>
-                        <th pSortableColumn="sumAssured">Sum Assured <p-sortIcon field="sumAssured"></p-sortIcon></th>
-<!--                        <th pSortableColumn="approvalstatus">Approval Status <p-sortIcon field="approvalstatus"></p-sortIcon>-->
-<!--                            <p-columnFilter type="text" field="approvalstatus"
-                                    display="menu" placeholder="Search by Approval Status"></p-columnFilter>-->
+                        <th pSortableColumn="premiumtype">Premium Type <p-sortIcon field="premiumtype"></p-sortIcon></th>
+<!--                        <th pSortableColumn="installmentType">Installment Type <p-sortIcon field="installmentType"></p-sortIcon></th>-->
+<!--                        <th pSortableColumn="installmentPremium">Installment Premium <p-sortIcon field="installmentPremium"></p-sortIcon></th>-->
+                        <th pSortableColumn="minSumAssured">Min Sum Assured <p-sortIcon field="minSumAssured"></p-sortIcon></th>
+                        <th pSortableColumn="maxSumAssured">Max Sum Assured <p-sortIcon field="maxSumAssured"></p-sortIcon></th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
                                 Approval Status
-                                <p-columnFilter field="approvalstatus" matchMode="equals" display="menu">
+                                <p-columnFilter field="approval_status" matchMode="equals" display="menu">
                                     <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                         <p-dropdown [ngModel]="value" [options]="approvalStatusOptions" (onChange)="filter($event.value)" placeholder="Any" [style]="{'min-width': '12rem'}" >
                                             <ng-template let-option pTemplate="item">
@@ -100,20 +100,32 @@
                         </td>
                         <td>
                             <p-tableCheckbox [value]="product" [disabled]="!isProductEnabled(product)">
-<!--                                             [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'">-->
+<!--                                             [disabled]="product.approval_status == 'Approved' || product.approval_status == 'Rejected'">-->
                             </p-tableCheckbox>
                         </td>
                         <td>{{ product.name }}</td>
                         <td>{{ product.type }}</td>
-                        <td>{{ product.frequency }}</td>
-                        <td>{{ product.premiumTerm }}</td>
-                        <td>{{ product.installmentType }}</td>
-                        <td>{{ product.installmentPremium }}</td>
-                        <td>{{ product.sumAssured }}</td>
-<!--                        <td>{{ product.approvalstatus }}</td>-->
+                        <td>{{ product.plan_code }}</td>
                         <td>
-                            <span [class]="'approvalstatus-badge approvalstatus-' + product.approvalstatus?.toLowerCase()">
-                                {{ product.approvalstatus }}
+                            <div *ngFor="let inter of product.intermediary">
+                                {{ inter }}
+                            </div>
+                        </td>
+                        <td>
+                            <div *ngFor="let freq of product.frequency">
+                                {{ freq }}
+                            </div>
+                        </td>
+                        <td>
+                            <div *ngFor="let ptype of product.premiumtype">
+                                {{ ptype }}
+                            </div>
+                        </td>
+                        <td>{{ product.minSumAssured }}</td>
+                        <td>{{ product.maxSumAssured }}</td>
+                        <td>
+                            <span [class]="'approvalstatus-badge approvalstatus-' + product.approval_status?.toLowerCase()">
+                                {{ product.approval_status }}
                             </span>
                         </td>
                         <td>
@@ -121,27 +133,32 @@
                                 <ng-container *ngIf="isMakerUser">
                                     <button pButton pRipple icon="pi pi-pencil"
                                             class="p-button-rounded p-button-success mr-2"
-                                            [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'"
+                                            [disabled]="product.approval_status == 'Approved' || product.approval_status == 'Rejected'"
                                             (click)="editProduct(product)"></button>
                                     <button pButton pRipple icon="pi pi-trash"
                                             class="p-button-rounded p-button-warning"
-                                            [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'"
+                                            [disabled]="product.approval_status == 'Approved' || product.approval_status == 'Rejected'"
                                             (click)="deleteProduct(product)"></button>
                                 </ng-container>
 
                                 <ng-container *ngIf="!isMakerUser">
+                                    <!-- Edit Button -->
+                                    <button pButton pRipple icon="pi pi-pencil"
+                                            class="p-button-rounded p-button-success mr-2"
+                                            [disabled]="product.approval_status == 'Approved' || product.approval_status == 'Rejected'"
+                                            (click)="editProduct(product)"></button>
                                     <!-- Approve Button -->
                                     <button pButton pRipple icon="pi pi-check"
                                             class="p-button-rounded p-button-info mr-2"
                                             (click)="approveProduct(product)"
-                                            [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'"
+                                            [disabled]="product.approval_status == 'Approved' || product.approval_status == 'Rejected'"
                                     ></button>
 
                                     <!-- Reject Button -->
                                     <button pButton pRipple icon="pi pi-times"
                                             class="p-button-rounded p-button-danger"
                                             (click)="rejectProduct(product)"
-                                            [disabled]="product.approvalstatus == 'Approved' || product.approvalstatus == 'Rejected'"
+                                            [disabled]="product.approval_status == 'Approved' || product.approval_status == 'Rejected'"
                                     ></button>
 
                                 </ng-container>
@@ -149,7 +166,7 @@
                         </td>
                     </tr>
                 </ng-template>
-                <!-- Row Expansion Template -->
+                <!-- Row Expansion Template #1-->
                 <ng-template pTemplate="rowexpansion" let-product>
                     <tr>
                         <td colspan="100">
@@ -157,32 +174,90 @@
                                 <!-- Unified Header -->
                                 <div class="header-row">
                                     <div class="header-item">UIN Number</div>
-                                    <div class="header-item">Age at Entry</div>
-                                    <div class="header-item">Maturity Age</div>
-                                    <div class="header-item">Intermediary</div>
-                                    <div class="header-item">Limited Premium Term</div>
-                                    <div class="header-item">Policy Term</div>
-                                    <div class="header-item">Single Premium</div>
-                                    <div class="header-item">Clawback</div>
-                                    <div class="header-item">Product Launch Date</div>
-                                    <div class="header-item">Product Exit Date</div>
-                                    <div class="header-item">Annuity Purchase Price</div>
+                                    <div class="header-item">Min Age at Entry</div>
+                                    <div class="header-item">Max Age at Entry</div>
+                                    <div class="header-item">Min Maturity Age</div>
+                                    <div class="header-item">Max Maturity Age</div>
+                                    <div class="header-item">Min Regular Premium</div>
+                                    <div class="header-item">Max Regular Premium</div>
+                                    <div class="header-item">Limited Premium 1</div>
+                                    <div class="header-item">Limited Premium 2</div>
+                                    <div class="header-item">Limited Premium 3</div>
+                                    <div class="header-item">Limited Premium 4</div>
                                 </div>
 
                                 <!-- Row Values -->
                                 <div class="value-row">
 
                                     <div class="value-item">{{ product.uinNumber }}</div>
-                                    <div class="value-item">{{ product.ageAtEntry }}</div>
-                                    <div class="value-item">{{ product.maturityAge }}</div>
-                                    <div class="value-item">{{ product.intermediary }}</div>
-                                    <div class="value-item">{{ product.limitedPremiumTerm }}</div>
-                                    <div class="value-item">{{ product.policyTerm }}</div>
-                                    <div class="value-item">{{ product.singlePremium }}</div>
+                                    <div class="value-item">{{ product.minAgeAtEntry }}</div>
+                                    <div class="value-item">{{ product.maxAgeAtEntry }}</div>
+                                    <div class="value-item">{{ product.minMaturityAge }}</div>
+                                    <div class="value-item">{{ product.maxMaturityAge }}</div>
+                                    <div class="value-item">{{ product.minRegularPremium }}</div>
+                                    <div class="value-item">{{ product.maxRegularPremium }}</div>
+                                    <div class="value-item">{{ product.limitedPremium1 }}</div>
+                                    <div class="value-item">{{ product.limitedPremium2 }}</div>
+                                    <div class="value-item">{{ product.limitedPremium3 }}</div>
+                                    <div class="value-item">{{ product.limitedPremium4 }}</div>
+                                </div>
+
+                                <!-- Section 2 -->
+                                <div class="header-row mt-4">
+                                    <div class="header-item">Product Launch Date</div>
+                                    <div class="header-item">Product Exit Date</div>
+                                    <div class="header-item">Cheque Clearance</div>
+
+                                    <div class="header-item">Min Policy Term</div>
+                                    <div class="header-item">Max Policy Term</div>
+                                    <div class="header-item">Min Installment Premium Yearly</div>
+                                    <div class="header-item">Max Installment Premium Yearly</div>
+                                    <div class="header-item">Min Installment Premium Half Yearly</div>
+                                    <div class="header-item">Max Installment Premium Half Yearly</div>
+                                    <div class="header-item">Min Installment Premium Quarterly</div>
+                                    <div class="header-item">Max Installment Premium Quarterly</div>
+
+                                </div>
+
+                                <div class="value-row">
+                                    <div class="value-item">{{ product.launchDate | date:'yyyy-MM-dd' }}</div>
+                                    <div class="value-item">{{ product.exitDate | date:'yyyy-MM-dd' }}</div>
+                                    <div class="value-item">{{ product.chequeClearance }}</div>
+
+                                    <div class="value-item">{{ product.minPolicyTerm }}</div>
+                                    <div class="value-item">{{ product.maxPolicyTerm }}</div>
+                                    <div class="value-item">{{ product.minInstallmentPremiumYearly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.maxInstallmentPremiumYearly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.minInstallmentPremiumHalfYearly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.maxInstallmentPremiumHalfYearly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.minInstallmentPremiumQuarterly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.maxInstallmentPremiumQuarterly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+
+                                </div>
+
+                                <!-- Section 3 -->
+                                <div class="header-row mt-4">
+                                    <div class="header-item">Min Installment Premium Monthly</div>
+                                    <div class="header-item">Max Installment Premium Monthly</div>
+                                    <div class="header-item">Min Single Premium Amount</div>
+                                    <div class="header-item">Max Single Premium Amount</div>
+                                    <div class="header-item">Min Annuity Purchase Price</div>
+                                    <div class="header-item">Max Annuity Purchase Price</div>
+                                    <div class="header-item">Clawback</div>
+                                    <div class="header-item">Bonus Commission Eligibility</div>
+                                    <div class="header-item">Bonus Commission Percentage</div>
+                                </div>
+
+                                <div class="value-row">
+                                    <div class="value-item">{{ product.minInstallmentPremiumMonthly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.maxInstallmentPremiumMonthly | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.minSinglePremiumAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.maxSinglePremiumAmount | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.minAnnuityPurchasePrice | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
+                                    <div class="value-item">{{ product.maxAnnuityPurchasePrice | currency:'INR':'symbol':'1.2-2':'en-IN' }}</div>
                                     <div class="value-item">{{ product.clawback }}</div>
-                                    <div class="value-item">{{ product.productLaunchDate | date:'yyyy-MM-dd' }}</div>
-                                    <div class="value-item">{{ product.productExitDate | date:'yyyy-MM-dd' }}</div>
-                                    <div class="value-item">{{ product.annuityPurchasePrice | currency:'INR' }}</div>
+                                    <div class="value-item">{{ product.bonusCommissionEligibility }}</div>
+                                    <div class="value-item">{{ product.bonusCommissionPercentage | number:'1.2-2' }}%</div>
                                 </div>
                             </div>
                         </td>

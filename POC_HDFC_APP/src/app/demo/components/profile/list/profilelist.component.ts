@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { Customer } from 'src/app/demo/api/customer';
-import { Product } from 'src/app/demo/api/product';
-import { CustomerService } from 'src/app/demo/service/customer.service';
-import { ProductService } from 'src/app/demo/service/product.service';
-import { ProfileService } from '../../../service/profile.service';
-import { ProductType } from "../../models/producttype";
+//import { Customer } from 'src/app/demo/api/customer';
+//import { Product } from 'src/app/demo/api/product';
+//import { CustomerService } from 'src/app/demo/service/customer.service';
+//import { ProductService } from 'src/app/demo/service/product.service';
+import { ProductsService } from '../../../service/products.service';
+import { Products } from "../../models/products";
 import { AppConfig } from "../../models/appconfig";
-import { createDefaultProductType } from '../../utils/producttype.util';
+import { createDefaultProductType } from '../../utils/products.util';
 import { EmployeeService } from '../../../service/employee.service';
 import { forkJoin } from 'rxjs';
 import { saveAs } from 'file-saver';
@@ -17,11 +18,13 @@ import { saveAs } from 'file-saver';
 @Component({
     templateUrl: './profilelist.component.html',
     styleUrls: ['./profilelist.component.css'],
-    providers: [EmployeeService]
+    providers: [EmployeeService,
+                ProductsService],
+
 })
 export class ProfileListComponent implements OnInit {
 
-    customers: Customer[] = [];
+    //customers: Customer[] = [];
 
     expandedRowKeys: { [key: string]: boolean } = {};
 
@@ -29,11 +32,13 @@ export class ProfileListComponent implements OnInit {
     cols: any[] = [
         { field: 'name', header: 'Name' },
         { field: 'type', header: 'Type' },
+        { field: 'plan_code', header: 'Plan Code' },
+        { field: 'intermediary', header: 'Intermediary' },
         { field: 'frequency', header: 'Frequency' },
-        { field: 'premiumTerm', header: 'Premium Term' },
-        { field: 'installmentType', header: 'Installment Type' },
-        { field: 'installmentPremium', header: 'Installment Premium' },
-        { field: 'sumAssured', header: 'Sum Assured' },
+        { field: 'premiumtype', header: 'Premium Type' },
+        { field: 'minSumAssured', header: 'Min Sum Assured' },
+        { field: 'maxSumAssured', header: 'Max Sum Assured' },
+        { field: 'approval_status', header: 'Approval Status' },
         { field: 'actions', header: 'Actions' }
     ];
 
@@ -43,11 +48,11 @@ export class ProfileListComponent implements OnInit {
 
         deleteProductsDialog: boolean = false;
 
-        products: ProductType[] = [];
+        products: Products[] = [];
 
-        product: ProductType = createDefaultProductType();
+        product: Products = createDefaultProductType();
 
-        selectedProducts: ProductType[] = [];
+        selectedProducts: Products[] = [];
 
         submitted: boolean = false;
 
@@ -60,7 +65,10 @@ export class ProfileListComponent implements OnInit {
         approvalStatusOptions: { label: string, value: string }[] = [];
         constructor(
             public employeeService: EmployeeService,
-            private router:Router,private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService, private profileService: ProfileService) { }
+            private router:Router,
+            private messageService: MessageService,
+            private confirmationService: ConfirmationService,
+            private productsService: ProductsService) { }
 
         ngOnInit() {
             this.isMakerUser = this.employeeService.isMaker();
@@ -70,10 +78,21 @@ export class ProfileListComponent implements OnInit {
                         { label: 'Approved', value: 'Approved' },
                         { label: 'Rejected', value: 'Rejected' }
                     ];
-            this.profileService.getProductTypes().subscribe((data: ProductType[]) => {
-              this.products = data;
+            this.loadProductTypes();
+
+            // Listen to navigation events to refresh the list
+            this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+              this.loadProductTypes();
             });
 
+        }
+
+        loadProductTypes() {
+            this.productsService.getProductTypes().subscribe((data: Products[]) => {
+              this.products = data;
+              console.log(data);
+              console.log("Count", this.products.length)
+            });
         }
 
         openNew() {
@@ -87,26 +106,26 @@ export class ProfileListComponent implements OnInit {
              this.deleteProductsDialog = true;
         }
 
-        editProduct(product: ProductType) {
-             this.product = { ...createDefaultProductType(), ...product } as ProductType;
+        editProduct(product: Products) {
+             this.product = { ...createDefaultProductType(), ...product } as Products;
              //this.productDialog = true;
              this.router.navigate(['profile/update', this.product.id]);
         }
 
-        deleteProduct(product: ProductType) {
+        deleteProduct(product: Products) {
              this.deleteProductDialog = true;
-             this.product = { ...createDefaultProductType(), ...product } as ProductType;
+             this.product = { ...createDefaultProductType(), ...product } as Products;
         }
 
-        approveProduct(product: ProductType) {
-          this.profileService.updateApprovalStatus(product.id, 'Approved').subscribe(
+        approveProduct(product: Products) {
+          this.productsService.updateApprovalStatus(product.id, 'Approved').subscribe(
             updatedProduct => {
               this.messageService.add({
                 severity: 'success',
                 summary: 'Approved',
                 detail: `Product ${updatedProduct.name} approved successfully`
               });
-              this.profileService.getProductTypes().subscribe((data: ProductType[]) => {
+              this.productsService.getProductTypes().subscribe((data: Products[]) => {
                             this.products = data;
                           });
             },
@@ -120,15 +139,15 @@ export class ProfileListComponent implements OnInit {
           );
         }
 
-        rejectProduct(product: ProductType) {
-                  this.profileService.updateApprovalStatus(product.id, 'Reject').subscribe(
+        rejectProduct(product: Products) {
+                  this.productsService.updateApprovalStatus(product.id, 'Reject').subscribe(
                     updatedProduct => {
                       this.messageService.add({
                         severity: 'success',
                         summary: 'Rejected',
                         detail: `Product ${updatedProduct.name} rejected successfully`
                       });
-                      this.profileService.getProductTypes().subscribe((data: ProductType[]) => {
+                      this.productsService.getProductTypes().subscribe((data: Products[]) => {
                                     this.products = data;
                                   });
                     },
@@ -142,7 +161,7 @@ export class ProfileListComponent implements OnInit {
                   );
                 }
 
-        approveSelectedProducts(selectedProducts: ProductType[]) {
+        approveSelectedProducts(selectedProducts: Products[]) {
             if (!selectedProducts || selectedProducts.length === 0) {
                 this.messageService.add({
                     severity: 'warn',
@@ -153,17 +172,17 @@ export class ProfileListComponent implements OnInit {
             }
 
             const updateObservables = selectedProducts.map(product =>
-                this.profileService.updateApprovalStatus(product.id, 'Approved')
+                this.productsService.updateApprovalStatus(product.id, 'Approved')
             );
 
             forkJoin(updateObservables).subscribe(
-                (updatedProducts: ProductType[]) => {
+                (updatedProducts: Products[]) => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Approved',
                         detail: `${updatedProducts.length} products approved successfully`
                     });
-                    this.profileService.getProductTypes().subscribe((data: ProductType[]) => {
+                    this.productsService.getProductTypes().subscribe((data: Products[]) => {
                                                         this.products = data;
                                                       });
                 },
@@ -177,7 +196,7 @@ export class ProfileListComponent implements OnInit {
             );
         }
 
-        rejectSelectedProducts(selectedProducts: ProductType[]) {
+        rejectSelectedProducts(selectedProducts: Products[]) {
             if (!selectedProducts || selectedProducts.length === 0) {
                 this.messageService.add({
                     severity: 'warn',
@@ -188,17 +207,17 @@ export class ProfileListComponent implements OnInit {
             }
 
             const updateObservables = selectedProducts.map(product =>
-                this.profileService.updateApprovalStatus(product.id, 'Rejected')
+                this.productsService.updateApprovalStatus(product.id, 'Rejected')
             );
 
             forkJoin(updateObservables).subscribe(
-                (updatedProducts: ProductType[]) => {
+                (updatedProducts: Products[]) => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Rejected',
                         detail: `${updatedProducts.length} products rejected successfully`
                     });
-                    this.profileService.getProductTypes().subscribe((data: ProductType[]) => {
+                    this.productsService.getProductTypes().subscribe((data: Products[]) => {
                                                         this.products = data;
                                                       });
                 },
@@ -218,7 +237,7 @@ export class ProfileListComponent implements OnInit {
              const idsToDelete = this.selectedProducts.map(p => p.id);
 
              idsToDelete.forEach(id => {
-                  this.profileService.deleteProductType(id).subscribe({
+                  this.productsService.deleteProductType(id).subscribe({
                       next: () => {
                            console.log(`Product with ID ${id} deleted successfully`);
                             // Remove from local list after successful deletion
@@ -237,7 +256,7 @@ export class ProfileListComponent implements OnInit {
         confirmDelete() {
              this.deleteProductDialog = false;
              this.products = this.products.filter(val => val.id !== this.product.id);
-             this.profileService.deleteProductType(this.product.id).subscribe({
+             this.productsService.deleteProductType(this.product.id).subscribe({
                  next: () => {
                    console.log("ProductType deleted successfully");
                  },
@@ -288,15 +307,15 @@ export class ProfileListComponent implements OnInit {
             this.expandedRowKeys = event;  // Update the expandedRowKeys with the new state
         }
 
-    toggleRowExpansion(product: any, event: Event) {
-        console.log(product);
+    toggleRowExpansion(products: any, event: Event) {
+        console.log(products);
         event.preventDefault();  // Prevent the default anchor behavior
-        this.expandedRowKeys[product.id] = !this.expandedRowKeys[product.id];
+        this.expandedRowKeys[products.id] = !this.expandedRowKeys[products.id];
     }
 
-     isProductEnabled(product: ProductType): boolean {
+     isProductEnabled(product: Products): boolean {
             // Replace with your own logic to determine enabled state
-            return product.approvalstatus !== 'Approved' && product.approvalstatus !== 'Rejected';
+            return product.approval_status !== 'Approved' && product.approval_status !== 'Rejected';
         }
 
     get isAllEnabledSelected(): boolean {
@@ -322,16 +341,16 @@ export class ProfileListComponent implements OnInit {
                         ...this.selectedProducts,
                         ...this.products.filter(
                             product => this.isProductEnabled(product) &&
-                                                           product.approvalstatus !== 'Approved' && // Exclude approved products
-                                                           product.approvalstatus !== 'Rejected' && // Exclude rejected products
+                                                           product.approval_status !== 'Approved' && // Exclude approved products
+                                                           product.approval_status !== 'Rejected' && // Exclude rejected products
                                                            !this.selectedProducts.includes(product) // Avoid duplicates
                         )
                     ];
                 } else {
                     this.selectedProducts = this.selectedProducts.filter(
                         product => !this.isProductEnabled(product) &&
-                                                       product.approvalstatus !== 'Approved' && // Exclude approved products
-                                                       product.approvalstatus !== 'Rejected' && // Exclude rejected products
+                                                       product.approval_status !== 'Approved' && // Exclude approved products
+                                                       product.approval_status !== 'Rejected' && // Exclude rejected products
                                                        !this.selectedProducts.includes(product) // Avoid duplicates
                     );
                 }
@@ -341,11 +360,11 @@ export class ProfileListComponent implements OnInit {
             { header: 'Name', key: 'name' },
             { header: 'Type', key: 'type' },
             { header: 'Frequency', key: 'frequency' },
-            { header: 'Premium Term', key: 'premiumTerm' },
+            { header: 'Premium Term', key: 'premiumType' },
             { header: 'Installment Type', key: 'installmentType' },
             { header: 'Installment Premium', key: 'installmentPremium' },
             { header: 'Sum Assured', key: 'sumAssured' },
-            { header: 'Approval Status', key: 'approvalStatus' },
+            { header: 'Approval Status', key: 'approval_status' },
             { header: 'UIN Number', key: 'uinNumber' },
             { header: 'Age at Entry', key: 'ageAtEntry' },
             { header: 'Maturity Age', key: 'maturityAge' },

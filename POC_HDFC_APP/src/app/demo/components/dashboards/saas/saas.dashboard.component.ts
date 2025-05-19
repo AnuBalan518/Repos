@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { ProfileService } from '../../../service/profile.service';
+import { ProductsService } from '../../../service/products.service';
 import { EmployeeService } from '../../../service/employee.service';
 import { Employee } from '../../models/employee';
 import { forkJoin } from 'rxjs';
@@ -31,7 +31,7 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
     countOfOverAllProductTypes: number = 0;
     employees: Employee[] = [];
     constructor(public layoutService: LayoutService,
-        private profileService: ProfileService,
+        private productsService: ProductsService,
         private employeeService: EmployeeService) {
         this.subscription = this.layoutService.configUpdate$
         .pipe(debounceTime(25))
@@ -53,9 +53,9 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
 
     getProductTypesCount(): void {
         forkJoin({
-            new: this.profileService.getCountByApprovalStatus('New'),
-            rejected: this.profileService.getCountByApprovalStatus('Rejected'),
-            approved: this.profileService.getCountByApprovalStatus('Approved'),
+            new: this.productsService.getCountByApprovalStatus('New'),
+            rejected: this.productsService.getCountByApprovalStatus('Rejected'),
+            approved: this.productsService.getCountByApprovalStatus('Approved'),
           }).subscribe({
             next: (counts) => {
               this.countOfNewProductTypes = counts.new;
@@ -69,7 +69,7 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
           });
 //       let completedCalls = 0;
 //
-//       this.profileService.getCountByApprovalStatus('New').subscribe({
+//       this.productsService.getCountByApprovalStatus('New').subscribe({
 //         next: (count: number) => {
 //           this.countOfNewProductTypes = count;
 //           completedCalls++;
@@ -82,7 +82,7 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
 //         }
 //       });
 //
-//       this.profileService.getCountByApprovalStatus('Rejected').subscribe({
+//       this.productsService.getCountByApprovalStatus('Rejected').subscribe({
 //         next: (count: number) => {
 //           this.countOfRejectedProductTypes = count;
 //           completedCalls++;
@@ -95,7 +95,7 @@ export class SaaSDashboardComponent implements OnInit, OnDestroy {
 //         }
 //       });
 //
-//       this.profileService.getCountByApprovalStatus('Approved').subscribe({
+//       this.productsService.getCountByApprovalStatus('Approved').subscribe({
 //         next: (count: number) => {
 //           this.countOfApprovedProductTypes = count;
 //           completedCalls++;

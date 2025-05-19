@@ -1,0 +1,114 @@
+<div class="card min-max-card" style="width: 100%; max-width: 490px; height: 160px; padding: 10px;">
+    <div class="card-header">
+        <h3>{{ fieldName }}</h3>
+    </div>
+    <div class="card-body">
+        <form>
+            <!-- Flexbox container to align inputs side by side -->
+            <div class="grid formgrid p-fluid">
+                <div class="field mb-4 col-12 md:col-6">
+                    <label for="minValueInput">Min Value ({{ actualMinValue }})</label>
+                    <input
+                        type="number"
+                        id="minValueInput"
+                        [(ngModel)]="minValue"
+                        name="minValue"
+                        class="form-control"
+                        placeholder="Enter minimum value"
+                        (input)="onMinMaxChange()"
+                    />
+                    <small class="p-error" *ngIf="minValueError">
+                        <i class="pi pi-exclamation-circle"></i>
+                        {{ minValueError }}
+                    </small>
+                </div>
+                <div class="field mb-4 col-12 md:col-6">
+                    <label for="maxValueInput">Max Value ({{ actualMaxValue }})</label>
+                    <input
+                        type="number"
+                        id="maxValueInput"
+                        [(ngModel)]="maxValue"
+                        name="maxValue"
+                        class="form-control"
+                        placeholder="Enter maximum value"
+                        (input)="onMinMaxChange()"
+                    />
+                    <small class="p-error" *ngIf="maxValueError">
+                        <i class="pi pi-exclamation-circle"></i>
+                        {{ maxValueError }}
+                    </small>
+                </div>
+            </div>
+        </form>
+    </div>
+<!--    <div class="card-footer">-->
+<!--        <p>-->
+<!--            <strong>Current Values:</strong> Min: {{ minValue }}, Max: {{ maxValue }}-->
+<!--        </p>-->
+<!--    </div>-->
+</div>
+
+
+
+
+<!--<div class="card min-max-card">-->
+<!--    <div class="card-header">-->
+<!--        <h3>{{ fieldName }}</h3>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--        <form>-->
+<!--            <div class="form-group row">-->
+<!--                <div class="col-md-6">-->
+<!--                    <label for="minValueInput">Min Value</label>-->
+<!--                    <input-->
+<!--                        type="number"-->
+<!--                        id="minValueInput"-->
+<!--                        [(ngModel)]="minValue"-->
+<!--                        name="minValue"-->
+<!--                        class="form-control"-->
+<!--                        placeholder="Enter minimum value"-->
+<!--                    />-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                    <label for="maxValueInput">Max Value</label>-->
+<!--                    <input-->
+<!--                        type="number"-->
+<!--                        id="maxValueInput"-->
+<!--                        [(ngModel)]="maxValue"-->
+<!--                        name="maxValue"-->
+<!--                        class="form-control"-->
+<!--                        placeholder="Enter maximum value"-->
+<!--                    />-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash;            <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label for="minValueInput">Min Value</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input&ndash;&gt;-->
+<!--&lt;!&ndash;                    type="number"&ndash;&gt;-->
+<!--&lt;!&ndash;                    id="minValueInput"&ndash;&gt;-->
+<!--&lt;!&ndash;                    [(ngModel)]="minValue"&ndash;&gt;-->
+<!--&lt;!&ndash;                    name="minValue"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;                    placeholder="Enter minimum value"&ndash;&gt;-->
+<!--&lt;!&ndash;                />&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label for="maxValueInput">Max Value</label>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input&ndash;&gt;-->
+<!--&lt;!&ndash;                    type="number"&ndash;&gt;-->
+<!--&lt;!&ndash;                    id="maxValueInput"&ndash;&gt;-->
+<!--&lt;!&ndash;                    [(ngModel)]="maxValue"&ndash;&gt;-->
+<!--&lt;!&ndash;                    name="maxValue"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="form-control"&ndash;&gt;-->
+<!--&lt;!&ndash;                    placeholder="Enter maximum value"&ndash;&gt;-->
+<!--&lt;!&ndash;                />&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <div class="card-footer">-->
+<!--        <p>-->
+<!--            <strong>Current Values:</strong> Min: {{ minValue }}, Max: {{ maxValue }}-->
+<!--        </p>-->
+<!--    </div>-->
+<!--</div>-->

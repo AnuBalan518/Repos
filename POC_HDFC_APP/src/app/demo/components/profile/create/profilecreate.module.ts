@@ -16,6 +16,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TagModule } from 'primeng/tag';
+import { ControlsModule } from '../../controls/controls.module';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
 	imports: [
@@ -35,7 +37,9 @@ import { TagModule } from 'primeng/tag';
 		ToolbarModule,
 		ReactiveFormsModule,
 		CheckboxModule,
-		TagModule
+		TagModule,
+		ControlsModule,
+		MultiSelectModule
 	],
 	declarations: [ProfileCreateComponent]
 })
