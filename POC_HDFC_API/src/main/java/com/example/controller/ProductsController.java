@@ -1,32 +1,46 @@
 package com.example.controller;
 
-import com.example.dto.ProductTypeDTO;
-import com.example.entity.ProductType;
+import com.example.dto.ProductsDTO;
+import com.example.entity.Products;
+import com.example.entity.ProductsData;
 import com.example.service.ProductTypeService;
+import com.example.service.ProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/product-types")
+@RequestMapping("/api/products")
 @Validated
-public class ProductTypeController {
+public class ProductsController {
 
 	@Autowired
-	private ProductTypeService service;
+	private ProductsService service;
 
 	// CREATE
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@Valid @RequestBody ProductTypeDTO dto) {
-		//service.validateBusinessRules(dto);
+	public ResponseEntity<?> create(@Valid @RequestBody ProductsDTO dto) {
+		Products products = new Products();
+		products.setName(dto.getName());
+		products.setCreatedBy(dto.getCreatedBy());
+
 		System.out.println("Request URI: " + dto);
-		ProductType created = service.save(dto);
+		//Products created = service.save(dto);
+		Products created = service.saveProductWithDetails(dto,
+				dto.getIntermediary(),
+				dto.getPremiumtype(),
+				dto.getFrequency(),
+				dto.getCreatedBy());
+
 		return ResponseEntity.ok(created);
 	}
 
@@ -37,30 +51,46 @@ public class ProductTypeController {
 //	}
 
 	@GetMapping("/all")
-	public ResponseEntity<List<ProductTypeDTO>> getAll() {
+	public ResponseEntity<List<ProductsDTO>> getAll() {
 		return ResponseEntity.ok(service.getAllActive());
 	}
 
 
 	@GetMapping("/{id}")
-	public ProductType getProductTypeById(@PathVariable Integer id) {
+	public Products getProductTypeById(@PathVariable Integer id) {
 		return service.getProductTypeById(id);
 	}
 
 	// UPDATE
+//	@PutMapping("/update/{id}")
+//	@PreAuthorize("hasRole('maker')")
+//	public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ProductsDTO dto) {
+//		//service.validateBusinessRules(dto);
+//		Products updated = service.update(id, dto)
+//				.orElseThrow(() -> new RuntimeException("Product not found"));
+//		return ResponseEntity.ok(updated);
+//	}
+
 	@PutMapping("/update/{id}")
 	@PreAuthorize("hasRole('maker')")
-	public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ProductTypeDTO dto) {
-		//service.validateBusinessRules(dto);
-		Optional<ProductType> updated = service.update(id, dto);
-		return ResponseEntity.ok(updated);
+	public ResponseEntity<?> update(@PathVariable Integer id, @Valid @RequestBody ProductsDTO dto) {
+		Optional<Products> updated = service.update(id, dto);
+
+		if (updated.isPresent()) {
+			return ResponseEntity.ok().body(dto);  // ✅ Return the actual product object
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("Product not found");
+		}
 	}
+
+
 
 	@PutMapping("/approve/{id}")
 	@PreAuthorize("hasRole('checker')")
 	public ResponseEntity<?> approve(@PathVariable Integer id) {
 		// Assuming you are not updating the other fields, just the approval_status
-		ProductType updated = service.updateApprovalStatus(id, "Approved");
+		Products updated = service.updateApprovalStatus(id, "Approved");
 		return ResponseEntity.ok(updated);
 	}
 
@@ -68,7 +98,7 @@ public class ProductTypeController {
 	@PreAuthorize("hasRole('checker')")
 	public ResponseEntity<?> reject(@PathVariable Integer id) {
 		// Assuming you are not updating the other fields, just the approval_status
-		ProductType updated = service.updateApprovalStatus(id, "Rejected");
+		Products updated = service.updateApprovalStatus(id, "Rejected");
 		return ResponseEntity.ok(updated);
 	}
 

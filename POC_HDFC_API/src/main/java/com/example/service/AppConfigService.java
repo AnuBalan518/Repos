@@ -35,4 +35,6 @@ public class AppConfigService {
 	public void delete(Integer id) {
 		repository.deleteById(id);
 	}
+
+
 }

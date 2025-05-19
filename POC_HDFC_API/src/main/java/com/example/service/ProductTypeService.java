@@ -49,9 +49,9 @@ public class ProductTypeService {
 				.collect(Collectors.toList());
 	}
 
-	public ProductType updateApprovalStatus(Integer id, String approvalstatus) {
+	public ProductType updateApprovalStatus(Integer id, String approval_status) {
 		ProductType productType = repository.findById(id).orElseThrow(() -> new RuntimeException("ProductType not found"));
-		productType.setApprovalstatus(approvalstatus); // Assuming there's a setter for approvalStatus
+		productType.setApprovalstatus(approval_status); // Assuming there's a setter for approval_status
 		return repository.save(productType);
 	}
 

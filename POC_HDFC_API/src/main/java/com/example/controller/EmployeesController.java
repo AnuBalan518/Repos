@@ -43,6 +43,7 @@ public class EmployeesController {
             response.put("token", token);
             response.put("firstname", userOpt.get().getFirstname());
             response.put("role", userOpt.get().getRole());
+            response.put("id", userOpt.get().getId().toString());
             return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
